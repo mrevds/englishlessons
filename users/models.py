@@ -66,10 +66,25 @@ class User(AbstractUser):
                 if len(self.level_letter) > 1:
                     raise ValidationError("Буква класса должна состоять только из одной буквы (например: А, Б, Е).")
 
+    def get_class_display(self):
+        """Красиво возвращает класс: 5-Е класс, 7-класс и т.д."""
+        if self.role == self.Role.TEACHER:
+            return ""
+        if self.level:
+            if self.level_letter:
+                return f"{self.level}-{self.level_letter.upper()} класс"
+            return f"{self.level}-класс"
+        return ""
+
     def __str__(self):
-        if self.role == self.Role.STUDENT:
-            return f"{self.get_full_name() or self.username} ({self.level}-класс)"
-        return f"{self.get_full_name() or self.username} (Учитель)"
+        class_info = self.get_class_display()
+        name = self.get_full_name() or self.username
+        if self.role == self.Role.STUDENT and class_info:
+            return f"{name} ({class_info})"
+        elif self.role == self.Role.TEACHER:
+            return f"{name} (Учитель)"
+        return name
+
 
     class Meta:
         verbose_name = "Пользователь"

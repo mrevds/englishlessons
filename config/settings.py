@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
+from datetime import timedelta
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -132,8 +133,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',  # ← основной
         'rest_framework.authentication.SessionAuthentication',  # для браузера и админки
-        # Позже добавим JWT, если нужно для мобильного/реакта
     ],
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
@@ -143,6 +144,13 @@ REST_FRAMEWORK = {
         'rest_framework.filters.OrderingFilter',
         'rest_framework.filters.SearchFilter',
     ],
+}
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=1),      # токен доступа — 1 час
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),         # refresh — 7 дней
+    'ROTATE_REFRESH_TOKENS': True,
+    'BLACKLIST_AFTER_ROTATION': True,
 }
 
 # Медиа-файлы (аватарки, будущие изображения и т.д.)
