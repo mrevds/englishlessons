@@ -2,6 +2,7 @@ version: '3.8'
 
 volumes:
   postgres_data:
+  frontend_dist:
 
 services:
   postgres:
@@ -11,8 +12,6 @@ services:
       POSTGRES_DB: englishlessons
       POSTGRES_USER: jaxa
       POSTGRES_PASSWORD: 11041104
-    ports:
-      - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
@@ -26,13 +25,35 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: englishlessons_backend
-    ports:
-      - "8080:8080"
     environment:
       DATABASE_URL: postgres://jaxa:11041104@postgres:5432/englishlessons?sslmode=disable
       JWT_SECRET: your-secret-key-change-in-production
       PORT: 8080
+      ALLOWED_ORIGIN: http://64.23.140.132
     depends_on:
       postgres:
         condition: service_healthy
+    restart: unless-stopped
+
+  frontend:
+    image: node:18-alpine
+    container_name: englishlessons_frontend_build
+    working_dir: /app
+    volumes:
+      - ./frontend:/app
+      - frontend_dist:/app/dist
+    command: sh -c "npm install && npm run build"
+
+  nginx:
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    container_name: englishlessons_nginx
+    ports:
+      - "80:80"
+    volumes:
+      - frontend_dist:/var/www/frontend:ro
+    depends_on:
+      - backend
+      - frontend
     restart: unless-stopped

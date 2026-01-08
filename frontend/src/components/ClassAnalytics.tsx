@@ -63,7 +63,7 @@ const ClassAnalytics: React.FC = () => {
       
       const token = localStorage.getItem('accessToken');
       const response = await fetch(
-        `${import.meta.env.VITE_API_URL || 'http://64.23.140.132:8080/api'}/export/stats?${new URLSearchParams(params).toString()}`,
+        `${import.meta.env.VITE_API_URL || 'https://playlist-nick-characters-schema.trycloudflare.com/api'}/export/stats?${new URLSearchParams(params).toString()}`,
         {
           method: 'GET',
           headers: {

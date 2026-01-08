@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://64.23.140.132:8080/api';
+const API_URL = import.meta.env.VITE_API_URL || 'https://playlist-nick-characters-schema.trycloudflare.com/api';
 
 const apiClient = axios.create({
   baseURL: API_URL,
