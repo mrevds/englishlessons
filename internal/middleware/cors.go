@@ -22,7 +22,7 @@ func CORS() gin.HandlerFunc {
 			"http://64.23.140.132:3000",
 			"http://64.23.140.132:8080",
 			"https://englishlessons.vercel.app",
-			"https://playlist-nick-characters-schema.trycloudflare.com",
+			"https://weldon-obvious-lecia.ngrok-free.dev",
 		}
 
 		// В production добавить реальные домены через переменные окружения

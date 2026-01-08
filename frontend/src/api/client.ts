@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = import.meta.env.VITE_API_URL || 'https://playlist-nick-characters-schema.trycloudflare.com/api';
+const API_URL = import.meta.env.VITE_API_URL || 'https://weldon-obvious-lecia.ngrok-free.dev/api';
 
 const apiClient = axios.create({
   baseURL: API_URL,
