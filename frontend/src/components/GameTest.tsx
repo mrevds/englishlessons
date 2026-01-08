@@ -16,7 +16,7 @@ const GameTest: React.FC<GameTestProps> = ({ lessonId, questions, onComplete: _o
   const [timeLeft, setTimeLeft] = useState(60 * questions.length); // 60 секунд на вопрос
   const [showResult, setShowResult] = useState(false);
   const [result, setResult] = useState<any>(null);
-  const [animations, setAnimations] = useState<Record<number, 'correct' | 'wrong' | null>>({});
+  const [animations] = useState<Record<number, 'correct' | 'wrong' | null>>({});
 
   useEffect(() => {
     if (timeLeft > 0 && !showResult) {
