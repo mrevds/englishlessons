@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import ThemeToggle from './ThemeToggle';
-import { BarChart3, User, Gamepad2, Trophy, Menu, X } from 'lucide-react';
+import { BarChart3, User, Trophy, Menu, X } from 'lucide-react';
 
 interface LayoutProps {
   children: React.ReactNode;

@@ -16,7 +16,6 @@ import MemoryCards from './pages/games/MemoryCards';
 import FillGapRace from './pages/games/FillGapRace';
 import QuizShow from './pages/games/QuizShow';
 import GameLeaderboard from './pages/games/GameLeaderboard';
-import ThemeToggle from './components/ThemeToggle';
 
 const PrivateRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { isAuthenticated, loading } = useAuth();

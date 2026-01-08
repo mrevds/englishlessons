@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { lessonsAPI } from '../api/lessons';
 import type { Question, AnswerOption } from '../api/lessons';
-import { PartyPopper, Frown, Star, X, CheckCircle2, Clock } from 'lucide-react';
+import { PartyPopper, Frown, Star, Clock } from 'lucide-react';
 
 interface GameTestProps {
   lessonId: number;
@@ -10,7 +10,7 @@ interface GameTestProps {
   onClose: () => void;
 }
 
-const GameTest: React.FC<GameTestProps> = ({ lessonId, questions, onComplete, onClose }) => {
+const GameTest: React.FC<GameTestProps> = ({ lessonId, questions, onComplete: _onComplete, onClose }) => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedAnswers, setSelectedAnswers] = useState<Record<string, number>>({});
   const [timeLeft, setTimeLeft] = useState(60 * questions.length); // 60 секунд на вопрос
@@ -178,7 +178,6 @@ const GameTest: React.FC<GameTestProps> = ({ lessonId, questions, onComplete, on
                   key={option.id}
                   onClick={() => {
                     handleAnswerSelect(currentQuestion.id, option.id);
-                    setAnimations({ ...animations, [option.id]: 'selected' });
                   }}
                   className={`w-full p-3 sm:p-4 rounded-xl text-left transition-all duration-200 transform hover:scale-[1.02] ${
                     isSelected

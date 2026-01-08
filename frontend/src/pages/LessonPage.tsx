@@ -161,7 +161,7 @@ const LessonPage: React.FC = () => {
           <GameTest
             lessonId={lesson.id}
             questions={lesson.questions}
-            onComplete={(result) => {
+            onComplete={() => {
               setShowTest(false);
               loadLesson(); // Обновляем данные урока
             }}

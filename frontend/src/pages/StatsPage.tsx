@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { lessonsAPI } from '../api/lessons';
-import { useAuth } from '../context/AuthContext';
 import Leaderboard from '../components/Leaderboard';
 import Achievements from '../components/Achievements';
 import { formatDateShort } from '../utils/date';
@@ -10,7 +9,6 @@ import { BarChart3, Loader2, ArrowLeft, Gem, Target, Star, Flame, CheckCircle2, 
 const StatsPage: React.FC = () => {
   const [stats, setStats] = useState<any>(null);
   const [loading, setLoading] = useState(true);
-  const { user } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {

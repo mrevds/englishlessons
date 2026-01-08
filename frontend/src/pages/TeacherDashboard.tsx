@@ -8,8 +8,8 @@ import type { Student, StudentStats } from '../api/users';
 import ClassAnalytics from '../components/ClassAnalytics';
 import ClassActivityChart from '../components/ClassActivityChart';
 import ThemeToggle from '../components/ThemeToggle';
-import { formatDateShort, formatDateTime } from '../utils/date';
-import { BarChart3, BookOpen, Loader2, CheckCircle2, Clock, Key, X, Gamepad2, Trophy, Timer, Filter, Users, Star } from 'lucide-react';
+import { formatDateShort } from '../utils/date';
+import { BarChart3, BookOpen, Loader2, CheckCircle2, Clock, Key, X, Gamepad2, Timer, Users } from 'lucide-react';
 
 const TeacherDashboard: React.FC = () => {
   const { user, logout } = useAuth();
