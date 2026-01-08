@@ -10,13 +10,17 @@ import (
 func CORS() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		origin := c.Request.Header.Get("Origin")
-		
+
 		// Разрешенные origins
 		allowedOrigins := []string{
 			"http://localhost:3000",
 			"http://localhost:5173",
 			"http://127.0.0.1:3000",
 			"http://127.0.0.1:5173",
+			"http://64.23.140.132",
+			"http://64.23.140.132:80",
+			"http://64.23.140.132:3000",
+			"http://64.23.140.132:8080",
 		}
 
 		// В production добавить реальные домены через переменные окружения
@@ -52,4 +56,3 @@ func CORS() gin.HandlerFunc {
 		c.Next()
 	}
 }
-
