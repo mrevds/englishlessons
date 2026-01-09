@@ -61,22 +61,14 @@ const ClassAnalytics: React.FC = () => {
       if (selectedLevel) params.level = selectedLevel;
       if (selectedLetter) params.level_letter = selectedLetter;
       
-      const token = localStorage.getItem('accessToken');
-      const response = await fetch(
-        `${import.meta.env.VITE_API_URL || 'https://playlist-nick-characters-schema.trycloudflare.com/api'}/export/stats?${new URLSearchParams(params).toString()}`,
-        {
-          method: 'GET',
-          headers: {
-            'Authorization': `Bearer ${token}`,
-          },
-        }
-      );
+      const response = await apiClient.get('/export/stats', {
+        params,
+        responseType: 'blob',
+      });
 
-      if (!response.ok) {
-        throw new Error('Ошибка при экспорте');
-      }
-
-      const blob = await response.blob();
+      const blob = new Blob([response.data], { 
+        type: format === 'csv' ? 'text/csv' : 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' 
+      });
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
