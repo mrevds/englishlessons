@@ -37,11 +37,11 @@ func main() {
 	// Настраиваем роутер
 	r := gin.Default()
 
+	// CORS middleware должен быть первым
+	r.Use(middleware.CORS())
+
 	// Security headers
 	r.Use(middleware.SecurityHeaders())
-
-	// CORS middleware
-	r.Use(middleware.CORS())
 
 	// Rate limiting для всех запросов
 	r.Use(middleware.RateLimit())

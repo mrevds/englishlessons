@@ -3,6 +3,7 @@ package middleware
 import (
 	"net/http"
 	"os"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 )
@@ -34,14 +35,21 @@ func CORS() gin.HandlerFunc {
 		originAllowed := false
 		for _, allowedOrigin := range allowedOrigins {
 			if origin == allowedOrigin {
-				c.Header("Access-Control-Allow-Origin", origin)
 				originAllowed = true
 				break
 			}
 		}
 
-		// Если origin не разрешен, не устанавливаем заголовок
+		// Специальная проверка для *.trycloudflare.com и ngrok
 		if !originAllowed && origin != "" {
+			if strings.HasSuffix(origin, ".trycloudflare.com") || strings.HasSuffix(origin, ".ngrok-free.dev") {
+				originAllowed = true
+			}
+		}
+
+		if originAllowed {
+			c.Header("Access-Control-Allow-Origin", origin)
+		} else if origin != "" {
 			c.AbortWithStatus(http.StatusForbidden)
 			return
 		}
