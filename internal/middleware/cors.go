@@ -6,11 +6,15 @@ import (
 	"strings"
 
 	"github.com/gin-gonic/gin"
+	"log"
 )
 
 func CORS() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		origin := c.Request.Header.Get("Origin")
+
+		// Логируем origin для отладки
+		log.Printf("CORS Origin: %s", origin)
 
 		// Разрешенные origins
 		allowedOrigins := []string{
@@ -48,6 +52,8 @@ func CORS() gin.HandlerFunc {
 				originAllowed = true
 			}
 		}
+
+		log.Printf("CORS OriginAllowed: %t", originAllowed)
 
 		if originAllowed {
 			c.Header("Access-Control-Allow-Origin", origin)
