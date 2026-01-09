@@ -12,14 +12,26 @@ const LessonsList: React.FC = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
 
+  // Кеш для уроков
+  const [cache, setCache] = useState<{ data: Lesson[]; timestamp: number } | null>(null);
+  const CACHE_DURATION = 10 * 60 * 1000; // 10 минут
+
   useEffect(() => {
     loadLessons();
   }, []);
 
   const loadLessons = async () => {
+    const now = Date.now();
+    if (cache && (now - cache.timestamp) < CACHE_DURATION) {
+      setLessons(cache.data);
+      setLoading(false);
+      return;
+    }
+
     try {
       const data = await lessonsAPI.getLessons();
       setLessons(data);
+      setCache({ data, timestamp: now });
     } catch (error) {
       console.error('Error loading lessons:', error);
     } finally {

@@ -37,6 +37,10 @@ const TeacherDashboard: React.FC = () => {
   });
   const [gamesTab, setGamesTab] = useState<'stats' | 'recent'>('stats');
 
+  // Кеш для студентов
+  const [studentsCache, setStudentsCache] = useState<Map<string, { data: Student[]; timestamp: number }>>(new Map());
+  const CACHE_DURATION = 5 * 60 * 1000; // 5 минут
+
   useEffect(() => {
     if (user?.role !== 'teacher') {
       navigate('/lessons');
@@ -78,8 +82,20 @@ const TeacherDashboard: React.FC = () => {
       if (filters.level) params.level = parseInt(filters.level);
       if (filters.level_letter) params.level_letter = filters.level_letter;
       
-      const data = await usersAPI.getStudents(params);
-      setStudents(data);
+      // Проверяем кеш
+      const cacheKey = `${filters.level || ''}-${filters.level_letter || ''}`;
+      const cached = studentsCache.get(cacheKey);
+      const now = Date.now();
+
+      if (cached && (now - cached.timestamp) < CACHE_DURATION) {
+        setStudents(cached.data);
+      } else {
+        const data = await usersAPI.getStudents(params);
+        setStudents(data);
+
+        // Обновляем кеш
+        setStudentsCache(new Map(studentsCache).set(cacheKey, { data, timestamp: now }));
+      }
     } catch (error) {
       console.error('Error loading students:', error);
     } finally {

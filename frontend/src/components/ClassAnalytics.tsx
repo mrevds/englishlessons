@@ -36,6 +36,11 @@ const ClassAnalytics: React.FC = () => {
   const [selectedLevel, setSelectedLevel] = useState(user?.level?.toString() || '');
   const [selectedLetter, setSelectedLetter] = useState(user?.level_letter || '');
 
+  // Кеш для данных аналитики
+  const [cache, setCache] = useState<Map<string, { data: ClassAnalyticsData; timestamp: number }>>(new Map());
+
+  const CACHE_DURATION = 5 * 60 * 1000; // 5 минут
+
   useEffect(() => {
     if (selectedLevel) {
       loadAnalytics();
@@ -43,6 +48,17 @@ const ClassAnalytics: React.FC = () => {
   }, [selectedLevel, selectedLetter]);
 
   const loadAnalytics = async () => {
+    const cacheKey = `${selectedLevel}-${selectedLetter}`;
+    const now = Date.now();
+    const cached = cache.get(cacheKey);
+
+    // Проверяем кеш
+    if (cached && (now - cached.timestamp) < CACHE_DURATION) {
+      setAnalytics(cached.data);
+      setError(null);
+      return;
+    }
+
     setLoading(true);
     setError(null);
     try {
@@ -50,7 +66,11 @@ const ClassAnalytics: React.FC = () => {
       if (selectedLetter) params.level_letter = selectedLetter;
       
       const response = await apiClient.get('/analytics/class', { params });
-      setAnalytics(response.data);
+      const data = response.data;
+      setAnalytics(data);
+
+      // Сохраняем в кеш
+      setCache(prev => new Map(prev).set(cacheKey, { data, timestamp: now }));
     } catch (error) {
       console.error('Error loading analytics:', error);
       setError('Ошибка при загрузке аналитики');

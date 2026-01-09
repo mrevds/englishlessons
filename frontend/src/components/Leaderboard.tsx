@@ -10,11 +10,24 @@ const Leaderboard: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [myRank, setMyRank] = useState<number | null>(null);
 
+  // Кеш для leaderboard
+  const [cache, setCache] = useState<{ data: LeaderboardEntry[]; timestamp: number } | null>(null);
+  const CACHE_DURATION = 5 * 60 * 1000; // 5 минут
+
   useEffect(() => {
     loadLeaderboard();
   }, []);
 
   const loadLeaderboard = async () => {
+    const now = Date.now();
+    if (cache && (now - cache.timestamp) < CACHE_DURATION) {
+      setLeaderboard(cache.data);
+      const myEntry = cache.data.find(entry => entry.user_id === user?.id);
+      if (myEntry) setMyRank(myEntry.rank);
+      setLoading(false);
+      return;
+    }
+
     try {
       const data = await leaderboardAPI.getLeaderboard();
       setLeaderboard(data);
@@ -24,6 +37,9 @@ const Leaderboard: React.FC = () => {
       if (myEntry) {
         setMyRank(myEntry.rank);
       }
+
+      // Сохраняем в кеш
+      setCache({ data, timestamp: now });
     } catch (error) {
       console.error('Error loading leaderboard:', error);
     } finally {
@@ -113,4 +129,3 @@ const Leaderboard: React.FC = () => {
 };
 
 export default Leaderboard;
-
