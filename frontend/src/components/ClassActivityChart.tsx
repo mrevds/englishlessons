@@ -1,6 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { analyticsAPI } from '../api/users';
 import { Loader2, TrendingUp, Calendar } from 'lucide-react';
+import {
+  ResponsiveContainer,
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  Tooltip,
+  Legend,
+  CartesianGrid,
+} from 'recharts';
 
 const ClassActivityChart: React.FC = () => {
   const [data, setData] = useState<any>(null);
@@ -45,18 +55,17 @@ const ClassActivityChart: React.FC = () => {
     );
   }
 
-  // Группируем данные по классам
-  const classData: { [key: string]: { dates: string[]; counts: number[] } } = {};
-  data.stats.forEach((stat: any) => {
-    const key = stat.class_display || `${stat.level || '?'}-${stat.level_letter || '?'}`;
-    if (!classData[key]) {
-      classData[key] = { dates: [], counts: [] };
-    }
-    classData[key].dates.push(stat.date);
-    classData[key].counts.push(stat.count);
+  // Готовим данные для recharts: массив объектов по датам, где ключи — классы
+  const classNames = Array.from(new Set(data.stats.map((stat: any) => stat.class_display || `${stat.level || '?'}-${stat.level_letter || '?'}`)));
+  const dateSet = Array.from(new Set(data.stats.map((stat: any) => stat.date)));
+  const chartData = dateSet.map(date => {
+    const entry: any = { date };
+    classNames.forEach(className => {
+      const stat = data.stats.find((s: any) => (s.class_display || `${s.level || '?'}-${s.level_letter || '?'}`) === className && s.date === date);
+      entry[className] = stat ? stat.count : 0;
+    });
+    return entry;
   });
-
-  const maxCount = Math.max(...data.stats.map((s: any) => s.count), 1);
 
   return (
     <div className="card">
@@ -81,48 +90,30 @@ const ClassActivityChart: React.FC = () => {
         </div>
       </div>
 
-      <div className="space-y-6">
-        {Object.entries(classData).map(([className, classStats]) => {
-          const total = classStats.counts.reduce((a, b) => a + b, 0);
-          const avg = total / classStats.counts.length;
-
-          return (
-            <div key={className} className="bg-gray-50 dark:bg-gray-800 rounded-xl p-4 border-2 border-gray-200 dark:border-gray-700">
-              <div className="flex justify-between items-center mb-3">
-                <div>
-                  <h3 className="font-bold text-lg text-gray-800 dark:text-gray-200">{className}</h3>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">
-                    Всего попыток: <span className="font-semibold">{total}</span> • 
-                    Среднее: <span className="font-semibold">{avg.toFixed(1)}</span> в день
-                  </p>
-                </div>
-              </div>
-              
-              {/* Простой график */}
-              <div className="flex items-end gap-0.5 sm:gap-1 h-24 sm:h-32 overflow-x-auto pb-6 sm:pb-8">
-                {classStats.counts.map((count, index) => {
-                  const height = (count / maxCount) * 100;
-                  const date = new Date(classStats.dates[index]);
-                  const dayLabel = date.toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit' });
-                  
-                  return (
-                    <div key={index} className="flex flex-col items-center flex-shrink-0 min-w-[24px] sm:min-w-[40px]">
-                      <div
-                        className="w-4 sm:w-8 bg-gradient-to-t from-blue-500 to-purple-600 rounded-t transition-all duration-300 hover:from-blue-600 hover:to-purple-700"
-                        style={{ height: `${Math.max(height, 5)}%` }}
-                        title={`${dayLabel}: ${count} попыток`}
-                      />
-                      <span className="text-[10px] sm:text-xs text-gray-500 dark:text-gray-400 mt-1">{count}</span>
-                      <span className="text-[8px] sm:text-xs text-gray-400 dark:text-gray-500 mt-1 rotate-45 origin-left whitespace-nowrap">
-                        {dayLabel}
-                      </span>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-          );
-        })}
+      <div className="w-full h-[320px] sm:h-[400px]">
+        <ResponsiveContainer width="100%" height="100%">
+          <BarChart
+            data={chartData}
+            margin={{ top: 20, right: 30, left: 0, bottom: 40 }}
+            barGap={4}
+          >
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="date" tick={{ fontSize: 12 }} angle={-30} textAnchor="end" interval={0} height={60} />
+            <YAxis allowDecimals={false} tick={{ fontSize: 12 }} />
+            <Tooltip wrapperClassName="!bg-white dark:!bg-gray-900 !rounded !shadow-lg" />
+            <Legend wrapperStyle={{ fontSize: '13px' }} />
+            {classNames.map((className, idx) => (
+              <Bar
+                key={className}
+                dataKey={className}
+                fill={idx % 2 === 0 ? "#6366f1" : "#a855f7"}
+                radius={[8, 8, 0, 0]}
+                maxBarSize={40}
+                name={className}
+              />
+            ))}
+          </BarChart>
+        </ResponsiveContainer>
       </div>
 
       <div className="mt-4 text-sm text-gray-500 dark:text-gray-400">
