@@ -55,9 +55,9 @@ const ClassAnalytics: React.FC = () => {
     }
   };
 
-  const handleExport = async () => {
+  const handleExport = async (format: 'csv' | 'excel') => {
     try {
-      const params: any = { format: 'csv' };
+      const params: any = { format };
       if (selectedLevel) params.level = selectedLevel;
       if (selectedLetter) params.level_letter = selectedLetter;
       
@@ -80,13 +80,14 @@ const ClassAnalytics: React.FC = () => {
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `students_stats_${new Date().toISOString().split('T')[0]}.csv`;
+      const extension = format === 'csv' ? 'csv' : 'xlsx';
+      a.download = `students_stats_${new Date().toISOString().split('T')[0]}.${extension}`;
       document.body.appendChild(a);
       a.click();
       window.URL.revokeObjectURL(url);
       document.body.removeChild(a);
     } catch (error) {
-      console.error('Error exporting CSV:', error);
+      console.error(`Error exporting ${format}:`, error);
       alert('Ошибка при экспорте файла');
     }
   };
@@ -107,9 +108,14 @@ const ClassAnalytics: React.FC = () => {
     <div className="card">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 sm:gap-0 mb-4 sm:mb-6">
         <h2 className="text-lg sm:text-2xl font-bold">📈 Аналитика класса</h2>
-        <button onClick={handleExport} className="btn-primary text-xs sm:text-sm py-2 px-3 sm:py-3 sm:px-4">
-          📥 Экспорт CSV
-        </button>
+        <div className="flex gap-2">
+          <button onClick={() => handleExport('csv')} className="btn-secondary text-xs sm:text-sm py-2 px-3">
+            📥 CSV
+          </button>
+          <button onClick={() => handleExport('excel')} className="btn-primary text-xs sm:text-sm py-2 px-3">
+            📥 Excel
+          </button>
+        </div>
       </div>
 
       {/* Фильтры */}

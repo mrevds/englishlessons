@@ -1,9 +1,10 @@
 package handlers
 
 import (
-	"englishlessons.back/internal/models"
 	"encoding/csv"
+	"englishlessons.back/internal/models"
 	"fmt"
+	"github.com/xuri/excelize/v2"
 	"net/http"
 	"strconv"
 	"strings"
@@ -36,6 +37,86 @@ func (h *Handlers) ExportStats(c *gin.Context) {
 	students, err := h.userService.GetStudents(filters)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to get students"})
+		return
+	}
+
+	if format == "excel" {
+		f := excelize.NewFile()
+		defer func() {
+			if err := f.Close(); err != nil {
+				fmt.Println(err)
+			}
+		}()
+
+		sheetName := "Students Stats"
+		index, _ := f.NewSheet(sheetName)
+		f.DeleteSheet("Sheet1")
+
+		// Заголовки
+		headers := []string{
+			"ID", "Имя", "Фамилия", "Класс", "Всего баллов", "Пройдено уроков",
+			"Средний процент", "Всего попыток",
+		}
+		for i, h := range headers {
+			cell, _ := excelize.CoordinatesToCellName(i+1, 1)
+			f.SetCellValue(sheetName, cell, h)
+		}
+
+		// Данные
+		for rowIdx, student := range students {
+			stats, err := h.userService.GetStudentStats(student.ID)
+			if err != nil {
+				continue
+			}
+
+			totalPoints := 0
+			if tp, ok := stats["total_points"].(int); ok {
+				totalPoints = tp
+			}
+			completedLessons := 0
+			if cl, ok := stats["completed_lessons"].(int); ok {
+				completedLessons = cl
+			}
+			totalAttempts := 0
+			if ta, ok := stats["total_attempts"].(int); ok {
+				totalAttempts = ta
+			}
+			avgPercentage := 0.0
+			if ap, ok := stats["average_percentage"].(float64); ok {
+				avgPercentage = ap
+			}
+
+			levelStr := ""
+			if student.Level != nil {
+				levelStr = fmt.Sprintf("%d-%s", *student.Level, student.LevelLetter)
+			}
+
+			values := []interface{}{
+				student.ID,
+				student.FirstName,
+				student.LastName,
+				levelStr,
+				totalPoints,
+				completedLessons,
+				avgPercentage,
+				totalAttempts,
+			}
+
+			for colIdx, val := range values {
+				cell, _ := excelize.CoordinatesToCellName(colIdx+1, rowIdx+2)
+				f.SetCellValue(sheetName, cell, val)
+			}
+		}
+
+		f.SetActiveSheet(index)
+
+		c.Header("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+		c.Header("Content-Disposition", fmt.Sprintf("attachment; filename=students_stats_%s.xlsx", time.Now().Format("20060102")))
+		c.Header("Access-Control-Expose-Headers", "Content-Disposition")
+
+		if err := f.Write(c.Writer); err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to generate excel"})
+		}
 		return
 	}
 
@@ -203,11 +284,11 @@ func (h *Handlers) GetClassAnalytics(c *gin.Context) {
 		}
 
 		lessonStats[i] = gin.H{
-			"lesson_id":         lesson.ID,
-			"lesson_title":      lesson.Title,
+			"lesson_id":          lesson.ID,
+			"lesson_title":       lesson.Title,
 			"lesson_order":       lesson.Order,
 			"total_students":     len(students),
-			"completed_count":   completedCount,
+			"completed_count":    completedCount,
 			"completion_rate":    float64(completedCount) / float64(len(students)) * 100,
 			"average_percentage": avgPercentage,
 			"total_attempts":     totalAttempts,
@@ -249,8 +330,8 @@ func (h *Handlers) GetClassAnalytics(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{
 		"class_info": gin.H{
-			"level":        levelInt,
-			"level_letter": levelLetter,
+			"level":          levelInt,
+			"level_letter":   levelLetter,
 			"total_students": len(students),
 		},
 		"overall_stats": gin.H{
@@ -294,4 +375,3 @@ func (h *Handlers) GetClassActivityStats(c *gin.Context) {
 		"stats": stats,
 	})
 }
-
