@@ -40,9 +40,11 @@ func CORS() gin.HandlerFunc {
 			}
 		}
 
-		// Специальная проверка для *.trycloudflare.com и ngrok
+		// Специальная проверка для *.trycloudflare.com, ngrok, vercel
 		if !originAllowed && origin != "" {
-			if strings.HasSuffix(origin, ".trycloudflare.com") || strings.HasSuffix(origin, ".ngrok-free.dev") {
+			if strings.HasSuffix(origin, ".trycloudflare.com") ||
+				strings.HasSuffix(origin, ".ngrok-free.dev") ||
+				strings.Contains(origin, "vercel.app") {
 				originAllowed = true
 			}
 		}
