@@ -56,8 +56,8 @@ const ClassActivityChart: React.FC = () => {
   }
 
   // Готовим данные для recharts: массив объектов по датам, где ключи — классы
-  const classNames = Array.from(new Set(data.stats.map((stat: any) => stat.class_display || `${stat.level || '?'}-${stat.level_letter || '?'}`)));
-  const dateSet = Array.from(new Set(data.stats.map((stat: any) => stat.date)));
+  const classNames = Array.from(new Set(data.stats.map((stat: any) => (stat.class_display || `${stat.level || '?'}-${stat.level_letter || '?'}`) as string))) as string[];
+  const dateSet = Array.from(new Set(data.stats.map((stat: any) => stat.date as string))) as string[];
   const chartData = dateSet.map(date => {
     const entry: any = { date };
     classNames.forEach(className => {
