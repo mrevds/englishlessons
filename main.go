@@ -64,6 +64,8 @@ func main() {
 		api.GET("/users/stats/me", h.GetMyStats)
 		api.GET("/users/stats/:id", h.GetStudentStats)
 		api.POST("/users/reset-password", h.ResetStudentPassword)
+		api.PUT("/users/profile", h.UpdateProfile)
+		api.PUT("/users/password", h.ChangePassword)
 
 		// Уроки
 		api.GET("/lessons", h.GetLessons)
