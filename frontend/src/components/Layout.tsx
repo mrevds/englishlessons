@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useTranslation } from 'react-i18next';
@@ -16,18 +16,22 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   const { t, i18n } = useTranslation();
   const [lang, setLang] = useState<string>(i18n.language || 'ru');
 
+  useEffect(() => {
+    const handleLanguageChange = (lng: string) => {
+      setLang(lng);
+    };
+    i18n.on('languageChanged', handleLanguageChange);
+    return () => {
+      i18n.off('languageChanged', handleLanguageChange);
+    };
+  }, [i18n]);
+
   const changeLanguage = async (lng: string) => {
     try {
       await i18n.changeLanguage(lng);
-      setLang(lng);
     } catch (e) {
       console.error('Error changing language:', e);
     }
-  };
-
-  const toggleLanguage = () => {
-    const newLng = (lang || '').startsWith('uz') ? 'ru' : 'uz-latn';
-    changeLanguage(newLng);
   };
 
   return (
@@ -82,22 +86,28 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
               <ThemeToggle />
 
               <div className="ml-2">
-                <div className="inline-flex rounded-md overflow-hidden border border-gray-200 dark:border-gray-700">
+                <div className="inline-flex rounded-lg overflow-hidden border border-gray-300 dark:border-gray-600 shadow-sm">
                   <button
                     type="button"
-                    onClick={toggleLanguage}
-                    aria-pressed={lang === 'ru'}
-                    className={`px-3 py-1 text-sm ${lang === 'ru' ? 'bg-gray-100 dark:bg-gray-700 font-semibold' : 'bg-transparent'}`}
+                    onClick={() => changeLanguage('ru')}
+                    className={`px-3 py-1.5 text-sm font-medium transition-colors ${
+                      lang === 'uz-latn' || (lang || '').startsWith('uz')
+                        ? 'bg-blue-600 text-white'
+                        : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
+                    }`}
                   >
-                    RU
+                    UZ
                   </button>
                   <button
                     type="button"
-                    onClick={toggleLanguage}
-                    aria-pressed={lang === 'uz-latn' || (lang || '').startsWith('uz')}
-                    className={`px-3 py-1 text-sm ${lang === 'uz-latn' || (lang || '').startsWith('uz') ? 'bg-gray-100 dark:bg-gray-700 font-semibold' : 'bg-transparent'}`}
+                    onClick={() => changeLanguage('uz-latn')}
+                    className={`px-3 py-1.5 text-sm font-medium transition-colors ${
+                      lang === 'ru'
+                        ? 'bg-blue-600 text-white'
+                        : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
+                    }`}
                   >
-                    UZ
+                    RU
                   </button>
                 </div>
               </div>
@@ -155,22 +165,28 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                 </button>
               )}
               <div className="px-4">
-                <div className="w-full inline-flex rounded-md overflow-hidden border border-gray-200 dark:border-gray-700 mb-3">
+                <div className="w-full inline-flex rounded-lg overflow-hidden border border-gray-300 dark:border-gray-600 shadow-sm mb-3">
                   <button
                     type="button"
-                    onClick={() => { toggleLanguage(); setMobileMenuOpen(false); }}
-                    aria-pressed={lang === 'ru'}
-                    className={`flex-1 px-3 py-2 text-sm ${lang === 'ru' ? 'bg-gray-100 dark:bg-gray-700 font-semibold' : 'bg-transparent'}`}
+                    onClick={() => { changeLanguage('ru'); setMobileMenuOpen(false); }}
+                    className={`flex-1 px-3 py-2 text-sm font-medium transition-colors ${
+                      lang === 'uz-latn' || (lang || '').startsWith('uz')
+                        ? 'bg-blue-600 text-white'
+                        : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
+                    }`}
                   >
-                    RU
+                    UZ
                   </button>
                   <button
                     type="button"
-                    onClick={() => { toggleLanguage(); setMobileMenuOpen(false); }}
-                    aria-pressed={lang === 'uz-latn' || (lang || '').startsWith('uz')}
-                    className={`flex-1 px-3 py-2 text-sm ${lang === 'uz-latn' || (lang || '').startsWith('uz') ? 'bg-gray-100 dark:bg-gray-700 font-semibold' : 'bg-transparent'}`}
+                    onClick={() => { changeLanguage('uz-latn'); setMobileMenuOpen(false); }}
+                    className={`flex-1 px-3 py-2 text-sm font-medium transition-colors ${
+                      lang === 'ru'
+                        ? 'bg-blue-600 text-white'
+                        : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
+                    }`}
                   >
-                    UZ
+                    RU
                   </button>
                 </div>
 
