@@ -71,24 +71,22 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
               <ThemeToggle />
 
               <div className="ml-2">
-                <div role="tablist" aria-label={t('nav.languageSelector')} className="inline-flex rounded-md overflow-hidden border border-gray-200 dark:border-gray-700">
+                <div className="inline-flex rounded-md overflow-hidden border border-gray-200 dark:border-gray-700">
                   <button
                     type="button"
-                    role="tab"
-                    aria-selected={i18n.language === 'ru'}
                     onClick={() => changeLanguage('ru')}
+                    aria-pressed={i18n.language === 'ru'}
                     className={`px-3 py-1 text-sm ${i18n.language === 'ru' ? 'bg-gray-100 dark:bg-gray-700 font-semibold' : 'bg-transparent'}`}
                   >
-                    {t('nav.lang_ru')}
+                    RU
                   </button>
                   <button
                     type="button"
-                    role="tab"
-                    aria-selected={i18n.language === 'uz-latn' || (i18n.language || '').startsWith('uz')}
                     onClick={() => changeLanguage('uz-latn')}
+                    aria-pressed={i18n.language === 'uz-latn' || (i18n.language || '').startsWith('uz')}
                     className={`px-3 py-1 text-sm ${i18n.language === 'uz-latn' || (i18n.language || '').startsWith('uz') ? 'bg-gray-100 dark:bg-gray-700 font-semibold' : 'bg-transparent'}`}
                   >
-                    {t('nav.lang_uz')}
+                    UZ
                   </button>
                 </div>
               </div>
@@ -150,16 +148,18 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                   <button
                     type="button"
                     onClick={() => { changeLanguage('ru'); setMobileMenuOpen(false); }}
+                    aria-pressed={i18n.language === 'ru'}
                     className={`flex-1 px-3 py-2 text-sm ${i18n.language === 'ru' ? 'bg-gray-100 dark:bg-gray-700 font-semibold' : 'bg-transparent'}`}
                   >
-                    {t('nav.lang_ru')}
+                    RU
                   </button>
                   <button
                     type="button"
                     onClick={() => { changeLanguage('uz-latn'); setMobileMenuOpen(false); }}
+                    aria-pressed={i18n.language === 'uz-latn' || (i18n.language || '').startsWith('uz')}
                     className={`flex-1 px-3 py-2 text-sm ${i18n.language === 'uz-latn' || (i18n.language || '').startsWith('uz') ? 'bg-gray-100 dark:bg-gray-700 font-semibold' : 'bg-transparent'}`}
                   >
-                    {t('nav.lang_uz')}
+                    UZ
                   </button>
                 </div>
 
