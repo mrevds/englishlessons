@@ -98,8 +98,8 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                     onClick={toggleLanguage}
                     className={`px-3 py-1.5 text-sm font-medium transition-colors ${
                       lang === 'uz-latn' || (lang || '').startsWith('uz')
-                        ? 'bg-blue-600 text-white'
-                        : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
+                        ? 'btn-primary'
+                        : 'btn-secondary'
                     }`}
                   >
                     UZ
@@ -109,8 +109,8 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                     onClick={toggleLanguage}
                     className={`px-3 py-1.5 text-sm font-medium transition-colors ${
                       lang === 'ru'
-                        ? 'bg-blue-600 text-white'
-                        : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
+                        ? 'btn-primary'
+                        : 'btn-secondary'
                     }`}
                   >
                     RU

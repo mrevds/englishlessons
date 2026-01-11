@@ -798,7 +798,7 @@ const resources = {
   }
 };
 
-// (resources as any)['uz'] = resources['uz-latn']; // alias for 'uz' (optional)
+(resources as any)['uz'] = resources['uz-latn']; // alias for 'uz'
 
 i18n
   .use(LanguageDetector)
