@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useTranslation } from 'react-i18next';
 import ThemeToggle from './ThemeToggle';
-import { BarChart3, User, Trophy, Menu, X } from 'lucide-react';
+import { BarChart3, User, Trophy, Menu, X, ChevronDown } from 'lucide-react';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -15,6 +15,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { t, i18n } = useTranslation();
   const [lang, setLang] = useState<string>(i18n.language || 'ru');
+  const [isMobileLangDropdownOpen, setIsMobileLangDropdownOpen] = useState(false);
 
   useEffect(() => {
     const handleLanguageChange = (lng: string) => {
@@ -25,6 +26,16 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       i18n.off('languageChanged', handleLanguageChange);
     };
   }, [i18n]);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (isMobileLangDropdownOpen && !(event.target as Element).closest('.mobile-language-dropdown')) {
+        setIsMobileLangDropdownOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [isMobileLangDropdownOpen]);
 
   const changeLanguage = async (lng: string) => {
     try {
@@ -150,14 +161,31 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                 </button>
               )}
               <div className="px-4">
-                <select
-                  value={lang}
-                  onChange={(e) => { changeLanguage(e.target.value); setMobileMenuOpen(false); }}
-                  className="w-full px-3 py-2 text-sm font-medium rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 mb-3"
-                >
-                  <option value="ru">🇷🇺 RU</option>
-                  <option value="uz-latn">🇺🇿 UZ</option>
-                </select>
+                <div className="relative mobile-language-dropdown mb-3">
+                  <button
+                    onClick={() => setIsMobileLangDropdownOpen(!isMobileLangDropdownOpen)}
+                    className="w-full btn-primary flex items-center justify-center gap-2"
+                  >
+                    {lang === 'ru' ? '🇷🇺 RU' : '🇺🇿 UZ'}
+                    <ChevronDown className="w-4 h-4" />
+                  </button>
+                  {isMobileLangDropdownOpen && (
+                    <div className="absolute top-full mt-2 left-0 right-0 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-50">
+                      <button
+                        onClick={() => { i18n.changeLanguage('ru'); setIsMobileLangDropdownOpen(false); setMobileMenuOpen(false); }}
+                        className="w-full px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-2"
+                      >
+                        🇷🇺 RU
+                      </button>
+                      <button
+                        onClick={() => { i18n.changeLanguage('uz-latn'); setIsMobileLangDropdownOpen(false); setMobileMenuOpen(false); }}
+                        className="w-full px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-2"
+                      >
+                        🇺🇿 UZ
+                      </button>
+                    </div>
+                  )}
+                </div>
 
                 <button
                   onClick={() => { logout(); setMobileMenuOpen(false); }}
