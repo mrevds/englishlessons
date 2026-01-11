@@ -29,9 +29,15 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   const changeLanguage = async (lng: string) => {
     try {
       await i18n.changeLanguage(lng);
+      console.log('Language changed to:', lng);
     } catch (e) {
       console.error('Error changing language:', e);
     }
+  };
+
+  const toggleLanguage = () => {
+    const newLng = (lang || '').startsWith('uz') ? 'ru' : 'uz-latn';
+    changeLanguage(newLng);
   };
 
   return (
@@ -89,7 +95,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                 <div className="inline-flex rounded-lg overflow-hidden border border-gray-300 dark:border-gray-600 shadow-sm">
                   <button
                     type="button"
-                    onClick={() => changeLanguage('ru')}
+                    onClick={toggleLanguage}
                     className={`px-3 py-1.5 text-sm font-medium transition-colors ${
                       lang === 'uz-latn' || (lang || '').startsWith('uz')
                         ? 'bg-blue-600 text-white'
@@ -100,7 +106,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                   </button>
                   <button
                     type="button"
-                    onClick={() => changeLanguage('uz-latn')}
+                    onClick={toggleLanguage}
                     className={`px-3 py-1.5 text-sm font-medium transition-colors ${
                       lang === 'ru'
                         ? 'bg-blue-600 text-white'
