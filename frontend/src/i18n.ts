@@ -555,13 +555,20 @@ const resources = {
   }
 };
 
+// Accept 'uz' as alias for 'uz-latn' (some detectors use 'uz')
+(resources as any)['uz'] = resources['uz-latn'];
+
 i18n
   .use(LanguageDetector)
   .use(initReactI18next)
   .init({
     resources,
     fallbackLng: 'ru',
-    supportedLngs: ['ru', 'uz-latn'],
+    supportedLngs: ['ru', 'uz-latn', 'uz'],
+    detection: {
+      order: ['localStorage', 'navigator'],
+      caches: ['localStorage']
+    },
     interpolation: {
       escapeValue: false
     }

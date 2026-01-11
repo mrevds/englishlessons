@@ -73,7 +73,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
               <div className="ml-2">
                 <select
                   aria-label={t('nav.languageSelector')}
-                  defaultValue={i18n.language || 'ru'}
+                  value={i18n.language || 'ru'}
                   onChange={(e) => changeLanguage(e.target.value)}
                   className="bg-transparent border border-gray-200 dark:border-gray-700 rounded px-2 py-1 text-sm"
                 >
@@ -137,7 +137,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
               <div className="px-4">
                 <select
                   aria-label={t('nav.languageSelector')}
-                  defaultValue={i18n.language || 'ru'}
+                  value={i18n.language || 'ru'}
                   onChange={(e) => { changeLanguage(e.target.value); setMobileMenuOpen(false); }}
                   className="w-full bg-transparent border border-gray-200 dark:border-gray-700 rounded px-2 py-2 text-sm mb-3"
                 >
