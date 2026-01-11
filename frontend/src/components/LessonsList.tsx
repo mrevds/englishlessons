@@ -89,43 +89,43 @@ const LessonsList: React.FC = () => {
               </div>
             </div>
           </div>
-          <div className="flex flex-wrap gap-2 sm:gap-4 items-center w-full sm:w-auto">
+          <div className="flex flex-wrap gap-1 sm:gap-2 items-center w-full sm:w-auto">
             {user?.role === 'teacher' ? (
               <button
                 onClick={() => navigate('/dashboard')}
-                className="btn-primary text-sm sm:text-base flex items-center gap-2"
+                className="btn-primary text-xs sm:text-sm flex items-center gap-1 px-2 py-1"
               >
-                <BarChart3 className="w-4 h-4" />
+                <BarChart3 className="w-3 h-3" />
                 {t('nav.dashboard')}
               </button> 
             ) : (
               <>
                 <button
                   onClick={() => navigate('/games')}
-                  className="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-4 sm:px-6 py-2 rounded-lg hover:from-purple-700 hover:to-pink-700 flex items-center gap-2 font-semibold shadow-lg text-sm sm:text-base"
+                  className="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-2 py-1 rounded-lg hover:from-purple-700 hover:to-pink-700 flex items-center gap-1 font-semibold shadow-lg text-xs sm:text-sm"
                 >
-                  <Gamepad2 className="w-4 h-4" />
+                  <Gamepad2 className="w-3 h-3" />
                   {t('lessons.games')}
                 </button>
                 <button
                   onClick={() => navigate('/profile')}
-                  className="btn-primary text-sm sm:text-base flex items-center gap-2"
+                  className="btn-primary text-xs sm:text-sm flex items-center gap-1 px-2 py-1"
                 >
-                  <User className="w-4 h-4" />
+                  <User className="w-3 h-3" />
                   {t('nav.profile')}
                 </button>
                 <button
                   onClick={() => navigate('/stats')}
-                  className="btn-secondary text-sm sm:text-base flex items-center gap-2"
+                  className="btn-secondary text-xs sm:text-sm flex items-center gap-1 px-2 py-1"
                 >
-                  <BarChart3 className="w-4 h-4" />
+                  <BarChart3 className="w-3 h-3" />
                   {t('lessons.stats')}
                 </button>
                 <button
                   onClick={() => navigate('/leaderboard')}
-                  className="btn-secondary text-sm sm:text-base flex items-center gap-2"
+                  className="btn-secondary text-xs sm:text-sm flex items-center gap-1 px-2 py-1"
                 >
-                  <Trophy className="w-4 h-4" />
+                  <Trophy className="w-3 h-3" />
                   {t('nav.leaderboard')}
                 </button>
               </>
@@ -133,10 +133,10 @@ const LessonsList: React.FC = () => {
             <div className="relative language-dropdown">
               <button
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                className="btn-primary text-sm sm:text-base flex items-center gap-2"
+                className="btn-primary text-xs sm:text-sm flex items-center gap-1 px-2 py-1"
               >
                 {currentLang === 'ru' ? '🇷🇺 RU' : '🇺🇿 UZ'}
-                <ChevronDown className="w-4 h-4" />
+                <ChevronDown className="w-3 h-3" />
               </button>
               {isDropdownOpen && (
                 <div className="absolute top-full mt-2 right-0 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-50 min-w-[120px]">
@@ -156,7 +156,7 @@ const LessonsList: React.FC = () => {
               )}
             </div>
             <ThemeToggle />
-            <button onClick={logout} className="btn-secondary text-sm sm:text-base">
+            <button onClick={logout} className="btn-secondary text-xs sm:text-sm px-2 py-1">
               {t('nav.logout')}
             </button> 
           </div>
