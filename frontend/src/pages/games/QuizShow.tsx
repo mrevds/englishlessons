@@ -3,6 +3,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import Layout from '../../components/Layout';
 import { Trophy, ArrowLeft, Clock } from 'lucide-react';
 import { gamesAPI } from '../../api/games';
+import { useTranslation } from 'react-i18next';
 
 interface Question {
   question: string;
@@ -15,6 +16,7 @@ const QuizShow: React.FC = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const levelParam = searchParams.get('level');
+  const { t } = useTranslation();
   const level = levelParam !== null ? Number(levelParam) : 0;
 
   const [questions, setQuestions] = useState<Question[]>([]);
@@ -28,6 +30,16 @@ const QuizShow: React.FC = () => {
   const [answerTime, setAnswerTime] = useState<number>(0);
   const [resultSaved, setResultSaved] = useState(false);
   const startTimeRef = useRef<number>(Date.now());
+
+  if (questions.length === 0) {
+    return (
+      <Layout>
+        <div className="max-w-4xl mx-auto px-3 sm:px-4 py-4 sm:py-8 text-center">
+          <p>{t('games.quizShowPage.loading')}</p>
+        </div>
+      </Layout>
+    );
+  }
 
   // Сохраняем результат игры
   useEffect(() => {
@@ -204,7 +216,7 @@ const QuizShow: React.FC = () => {
             className="btn-secondary mb-4 sm:mb-6 flex items-center gap-2 text-sm"
           >
             <ArrowLeft className="w-4 h-4" />
-            Назад к играм
+            {t('games.backToGames')}
           </button>
 
           <div className="card p-4 sm:p-8 text-center">
@@ -212,25 +224,25 @@ const QuizShow: React.FC = () => {
               {percentage >= 80 ? '🏆' : percentage >= 60 ? '🎉' : '💪'}
             </div>
             <h2 className="text-xl sm:text-3xl font-bold text-gray-900 dark:text-white mb-3 sm:mb-4">
-              Отличная работа!
+              {t('games.quizShowPage.resultTitle')}
             </h2>
             <div className="text-3xl sm:text-5xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent mb-4 sm:mb-6">
-              {score} очков
+              {t('games.quizShowPage.scoreDisplay', { score })}
             </div>
             <p className="text-base sm:text-xl text-gray-600 dark:text-gray-400 mb-6 sm:mb-8">
-              {percentage}% от максимума
+              {t('games.quizShowPage.percentOfMax', { percentage })}
             </p>
             <div className="mb-6 sm:mb-8">
               <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400 mb-2">
-                💡 <strong>Совет:</strong> Отвечай быстрее, чтобы получить больше очков!
+                💡 <strong>{t('games.quizShowPage.tipTitle')}</strong> {t('games.quizShowPage.tipText')}
               </p>
             </div>
             <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
               <button onClick={restartGame} className="btn-primary text-sm sm:text-base">
-                Играть снова
+                {t('games.quizShowPage.playAgain')}
               </button>
               <button onClick={() => navigate('/games')} className="btn-secondary text-sm sm:text-base">
-                Выбрать другую игру
+                {t('games.quizShowPage.chooseAnother')}
               </button>
             </div>
           </div>
@@ -251,7 +263,7 @@ const QuizShow: React.FC = () => {
           className="btn-secondary mb-4 sm:mb-6 flex items-center gap-2 text-sm"
         >
           <ArrowLeft className="w-4 h-4" />
-          Назад к играм
+          {t('games.backToGames')}
         </button>
 
         <div className="card p-4 sm:p-6 mb-4 sm:mb-6">
@@ -259,7 +271,7 @@ const QuizShow: React.FC = () => {
             <div className="flex items-center gap-2 sm:gap-3">
               <Trophy className="w-6 h-6 sm:w-8 sm:h-8 text-green-600" />
               <h1 className="text-lg sm:text-2xl font-bold text-gray-900 dark:text-white">
-                Quiz Show
+                {t('games.quizShow.title')}
               </h1>
             </div>
             <div className="flex items-center gap-2 sm:gap-4">
@@ -270,7 +282,7 @@ const QuizShow: React.FC = () => {
                 </span>
               </div>
               <div className="text-right">
-                <div className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">Очки</div>
+                <div className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">{t('games.quizShowPage.pointsLabel')}</div>
                 <div className="text-lg sm:text-2xl font-bold text-green-600">{score}</div>
               </div>
             </div>
@@ -278,7 +290,7 @@ const QuizShow: React.FC = () => {
 
           <div className="flex items-center justify-between mb-2">
             <span className="text-sm sm:text-base text-gray-600 dark:text-gray-400">
-              Вопрос {currentQuestion + 1} / {questions.length}
+              {t('games.quizShowPage.questionCounter', { current: currentQuestion + 1, total: questions.length })}
             </span>
           </div>
           <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2 sm:h-3">
@@ -330,21 +342,21 @@ const QuizShow: React.FC = () => {
             }`}>
               <div className="text-base sm:text-xl font-bold mb-2 sm:mb-3">
                 {selectedAnswer === null ? (
-                  <span className="text-orange-700 dark:text-orange-400">⏰ Время вышло!</span>
+                  <span className="text-orange-700 dark:text-orange-400">{t('games.quizShowPage.timeoutMessage')}</span>
                 ) : isCorrect ? (
                   <span className="text-green-700 dark:text-green-400">
-                    ✅ Правильно! +{pointsEarned} {pointsEarned === 1 ? 'очко' : 'очков'}
+                    {t('games.quizShowPage.correctMessagePoints', { points: pointsEarned })}
                   </span>
                 ) : (
-                  <span className="text-red-700 dark:text-red-400">❌ Неправильно</span>
+                  <span className="text-red-700 dark:text-red-400">{t('games.quizShowPage.wrongMessage')}</span>
                 )}
               </div>
               <p className="text-sm sm:text-base text-gray-700 dark:text-gray-300 mb-2">
-                <strong>Объяснение:</strong> {question.explanation}
+                <strong>{t('games.quizShowPage.explanationLabel')}</strong> {question.explanation}
               </p>
               {isCorrect && pointsEarned > 1 && (
                 <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">
-                  🚀 Бонус за быстрый ответ!
+                  {t('games.quizShowPage.bonusText')}
                 </p>
               )}
             </div>
@@ -352,7 +364,7 @@ const QuizShow: React.FC = () => {
 
           {showResult && (
             <button onClick={handleNext} className="btn-primary w-full text-base sm:text-xl py-3 sm:py-4">
-              {currentQuestion < questions.length - 1 ? 'Следующий вопрос' : 'Показать результаты'}
+              {currentQuestion < questions.length - 1 ? t('games.quizShowPage.nextQuestion') : t('games.quizShowPage.showResults')}
             </button>
           )}
         </div>

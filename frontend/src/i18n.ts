@@ -139,11 +139,137 @@ const resources = {
             title: 'Fill the Gap Race',
             description: 'Вставь пропущенное слово'
           },
+        },
+        levels: {
+          0: { label: 'Level 0 - Beginner', description: 'Базовые артикли, множественное число' },
+          1: { label: 'Level 1 - Beginner+', description: 'Исчисляемые/неисчисляемые, местоимения' },
+          2: { label: 'Level 2 - Elementary', description: 'Present Simple, базовые времена' },
+          3: { label: 'Level 3 - Elementary+', description: 'Present Continuous, притяжательные' },
+          4: { label: 'Level 4 - Pre-Intermediate', description: 'Past Simple, Past Continuous' },
+          5: { label: 'Level 5 - Pre-Intermediate+', description: 'Present Perfect, сравнения' },
+          6: { label: 'Level 6 - Intermediate', description: 'Past Perfect, Future tenses' },
+          7: { label: 'Level 7 - Intermediate+', description: 'Модальные глаголы, условные предложения' },
+          8: { label: 'Level 8 - Upper-Intermediate', description: 'Пассивный залог, фразовые глаголы' },
+          9: { label: 'Level 9 - Advanced', description: 'Косвенная речь, сложные структуры' },
+          10: { label: 'Level 10 - Proficiency', description: 'Все грамматические конструкции' }
+        },
+        fillGapRace: {
+            loading: 'Загрузка...',
+            backToGames: 'Назад к играм',
+            title: 'Гонка: Заполни пропуск',
+            questionCounter: 'Вопрос {{current}} / {{total}}',
+            points: 'Очки: {{score}}',
+            timeoutMessage: '⏰ Время вышло!',
+            correctMessage: '✅ Правильно! +1 очко',
+            wrongMessage: '❌ Неправильно! -1 жизнь',
+            correctAnswerLabel: 'Правильный ответ:',
+            playAgain: 'Играть снова',
+            chooseAnother: 'Выбрать другую игру',
+            nextQuestion: 'Следующий вопрос',
+            finish: 'Завершить',
+            resultTitleWin: 'Игра завершена!',
+            resultTitleLose: 'Игра окончена!',
+            correctPercentage: 'Правильных ответов: {{percentage}}%'
+          },
+          memoryCards: {
+            loading: 'Загрузка...',
+            backToGames: 'Назад к играм',
+            congrats: 'Поздравляем!',
+            movesSimple: 'Ходов',
+            timeSimple: 'Времени',
+            movesHeader: 'Ходов:',
+            pairsHeader: 'Пар:',
+            playAgain: 'Играть снова',
+            chooseAnother: 'Выбрать другую игру'
+          },
           'quiz-show': {
             title: 'Quiz Show',
             description: 'Ответь на вопросы викторины'
-          }
+          },
+          quizShowPage: {
+            loading: 'Загрузка...',
+            backToGames: 'Назад к играм',
+            resultTitle: 'Отличная работа!',
+            scoreDisplay: '{{score}} очков',
+            percentOfMax: '{{percentage}}% от максимума',
+            tipTitle: 'Совет:',
+            tipText: 'Отвечай быстрее, чтобы получить больше очков!',
+            playAgain: 'Играть снова',
+            chooseAnother: 'Выбрать другую игру',
+            timeoutMessage: '⏰ Время вышло!',
+            correctMessagePoints: '✅ Правильно! +{{points}} очков',
+            wrongMessage: '❌ Неправильно',
+            explanationLabel: 'Объяснение:',
+            bonusText: '🚀 Бонус за быстрый ответ!',
+            questionCounter: 'Вопрос {{current}} / {{total}}',
+            pointsLabel: 'Очки',
+            showResults: 'Показать результаты',
+            nextQuestion: 'Следующий вопрос'
+          },
+        backToGames: 'К играм',
+        leaderboard: {
+          header: 'Рейтинг и результаты',
+          myRank: 'Твоё место в {{game}} (Ур. {{level}})',
+          outOf: 'из {{count}} игроков',
+          noOneYet: 'Пока никто не играл на этом уровне',
+          beFirst: 'Будь первым!',
+          rankingByLevels: 'Рейтинг по уровням',
+          progressByGames: 'Прогресс по играм',
+          recentGamesTitle: 'Последние игры',
+          notPlayed: 'Вы ещё не играли',
+          startPlaying: '🎮 Начать играть!',
+          player: 'Игрок',
+          you: '(ты)',
+          totalGamesLabel: 'Всего игр',
+          avgScoreLabel: 'Средний балл',
+          totalTimeLabel: 'Время игры',
+          gameTypesLabel: 'Типов игр'
         },
+        tabs: {
+          ranking: 'Рейтинг',
+          history: 'История'
+        },
+        filters: {
+          game: 'Игра',
+          level: 'Уровень'
+        },
+        playMore: '🎮 Играть ещё!',
+        grammarDetective: {
+          loading: 'Загрузка...',
+          findErrorLabel: 'Найди ошибку в предложении:',
+          questionCounter: 'Вопрос {{current}} / {{total}}',
+          points: 'Очки: {{score}}',
+          correctMessage: '✅ Правильно! +1 очко',
+          wrongMessage: '❌ Неправильно',
+          correctAnswerLabel: 'Правильно:',
+          checkBtn: 'Проверить',
+          nextQuestion: 'Следующий вопрос',
+          finish: 'Завершить',
+          playAgain: 'Играть снова',
+          chooseAnother: 'Выбрать другую игру',
+          resultTitle: 'Игра завершена!',
+          correctPercentage: 'Правильных ответов: {{percentage}}%'        },
+        sentenceBuilder: {
+          loading: 'Загрузка...',
+          backToGames: 'Назад к играм',
+          title: 'Sentence Builder',
+          prompt: 'Собери предложение:',
+          translationLabel: 'Перевод:',
+          yourAnswer: 'Твой ответ:',
+          availableWords: 'Доступные слова:',
+          questionCounter: 'Предложение {{current}} / {{total}}',
+          points: 'Очки: {{score}}',
+          correctMessage: '✅ Правильно! +1 очко',
+          wrongMessage: '❌ Неправильно',
+          correctAnswerLabel: 'Правильно:',
+          checkBtn: 'Проверить',
+          resetBtn: 'Сбросить',
+          nextQuestion: 'Следующее предложение',
+          finish: 'Завершить',
+          playAgain: 'Играть снова',
+          chooseAnother: 'Выбрать другую игру',
+          resultTitle: 'Отлично!',
+          correctPercentage: 'Правильных ответов: {{percentage}}%'        }
       },
       lessonContent: {
         word: 'Слово',
@@ -414,10 +540,127 @@ const resources = {
             title: 'Fill the Gap Race',
             description: 'Tushib qolgan soʻzni joylashtiring'
           },
+        },
+        levels: {
+          0: { label: 'Level 0 - Beginner', description: "Bazoviy artikllar, ko'plik" },
+          1: { label: 'Level 1 - Beginner+', description: "Hisoblanadigan/Hisoblanmaydigan, olmoshlar" },
+          2: { label: 'Level 2 - Elementary', description: "Present Simple, asosiy zamonlar" },
+          3: { label: 'Level 3 - Elementary+', description: "Present Continuous, egalik olmoshlari" },
+          4: { label: 'Level 4 - Pre-Intermediate', description: "Past Simple, Past Continuous" },
+          5: { label: 'Level 5 - Pre-Intermediate+', description: "Present Perfect, taqqoslashlar" },
+          6: { label: 'Level 6 - Intermediate', description: "Past Perfect, Future zamonlar" },
+          7: { label: 'Level 7 - Intermediate+', description: "Modal fe'llar, shart gaplar" },
+          8: { label: 'Level 8 - Upper-Intermediate', description: "Passive, frazal fe'llar" },
+          9: { label: 'Level 9 - Advanced', description: "Bilvosita nutq, murakkab tuzilmalar" },
+          10: { label: 'Level 10 - Proficiency', description: "Barcha grammatik konstruktsiyalar" }
+        },
+        fillGapRace: {
+            loading: "Yuklanmoqda...",
+            backToGames: "O'yinlarga qaytish",
+            title: "Bo'shliqni to'ldirish poygasi",
+            questionCounter: 'Savol {{current}} / {{total}}',
+            points: 'Ballar: {{score}}',
+            timeoutMessage: '⏰ Vaqt tugadi!',
+            correctMessage: "✅ To'g'ri! +1 ochko",
+            wrongMessage: "❌ Noto'g'ri! -1 hayot",
+            correctAnswerLabel: "To'g'ri javob:",
+            playAgain: "Yana o'ynash",
+            chooseAnother: "Boshqa o'yinni tanlang",
+            nextQuestion: 'Keyingi savol',
+            finish: 'Tugallash',
+            resultTitleWin: "O'yin tugadi!",
+            resultTitleLose: "O'yin tugadi!",
+            correctPercentage: "To'g'ri javoblar: {{percentage}}%"
+          },
           'quiz-show': {
             title: 'Quiz Show',
             description: 'Viktorina savollariga javob bering'
-          }
+          },
+          quizShowPage: {
+            loading: "Yuklanmoqda...",
+            backToGames: "O'yinlarga qaytish",
+            resultTitle: "Ajoyib ish!",
+            scoreDisplay: '{{score}} ochko',
+            percentOfMax: '{{percentage}}% maksimaldan',
+            tipTitle: 'Maslahat:',
+            tipText: "Javoblarni tezroq bering — ko'proq ball olasiz!",
+            playAgain: "Yana o'ynash",
+            chooseAnother: "Boshqa o'yinni tanlang",
+            timeoutMessage: '⏰ Vaqt tugadi!',
+            correctMessagePoints: "✅ To'g'ri! +{{points}} ball",
+            wrongMessage: "❌ Noto'g'ri",
+            explanationLabel: "Tushuntirish:",
+            bonusText: "🚀 Tez javob uchun bonus!",
+            questionCounter: 'Savol {{current}} / {{total}}',
+            pointsLabel: 'Ballar',
+            showResults: 'Natijalarni ko‘rsatish',
+            nextQuestion: 'Keyingi savol'
+          },
+        backToGames: "O'yinlarga qaytish",
+        leaderboard: {
+          header: 'Reyting va natijalar',
+          myRank: "Sizning o'rningiz {{game}} (Daraja {{level}})",
+          outOf: "{{count}} o'yinchi orasida",
+          noOneYet: "Hozircha hech kim bu darajada o'ynamagan",
+          beFirst: "Birinchi bo'ling!",
+          rankingByLevels: "Darajalarga ko'ra reyting",
+          progressByGames: "O'yin bo'yicha progress",
+          recentGamesTitle: "So'nggi o'yinlar",
+          notPlayed: "Siz hali o'ynamagansiz",
+          startPlaying: "🎮 O'ynashni boshlang!",
+          player: "O'yinchi",
+          you: '(siz)',
+          totalGamesLabel: "Jami o'yinlar",
+          avgScoreLabel: "O'rtacha ball",
+          totalTimeLabel: "O'ynash vaqti",
+          gameTypesLabel: "O'yin turlari"
+        },
+        tabs: {
+          ranking: 'Reyting',
+          history: 'Tarix'
+        },
+        filters: {
+          game: "O'yin",
+          level: 'Daraja'
+        },
+        playMore: "🎮 Yana o'ynash!",
+        grammarDetective: {
+          loading: "Yuklanmoqda...",
+          findErrorLabel: "Jumlada xatoni toping:",
+          questionCounter: 'Savol {{current}} / {{total}}',
+          points: 'Ballar: {{score}}',
+          correctMessage: "✅ To'g'ri! +1 ochko",
+          wrongMessage: "❌ Noto'g'ri",
+          correctAnswerLabel: "To'g'ri:",
+          checkBtn: "Tekshirish",
+          nextQuestion: 'Keyingi savol',
+          finish: 'Tugallash',
+          playAgain: "Yana o'ynash",
+          chooseAnother: "Boshqa o'yinni tanlang",
+          resultTitle: "O'yin tugadi!",
+          correctPercentage: "To'g'ri javoblar: {{percentage}}%"
+        },
+        sentenceBuilder: {
+          loading: "Yuklanmoqda...",
+          backToGames: "O'yinlarga qaytish",
+          title: 'Sentence Builder',
+          prompt: "Jumlani yig'",
+          translationLabel: "Tarjima:",
+          yourAnswer: "Sizning javobingiz:",
+          availableWords: "Mavjud so'zlar:",
+          questionCounter: 'Jumlаl {{current}} / {{total}}',
+          points: 'Ballar: {{score}}',
+          correctMessage: "✅ To'g'ri! +1 ochko",
+          wrongMessage: "❌ Noto'g'ri",
+          correctAnswerLabel: "To'g'ri:",
+          checkBtn: "Tekshirish",
+          resetBtn: "Qayta boshlash",
+          nextQuestion: 'Keyingi jumla',
+          finish: 'Tugallash',
+          playAgain: "Yana o'ynash",
+          chooseAnother: "Boshqa o'yinni tanlang",
+          resultTitle: "Ajoyib!",
+          correctPercentage: "To'g'ri javoblar: {{percentage}}%"
         }
       },
       lessonContent: {
@@ -441,7 +684,7 @@ const resources = {
         startTest: 'Testni boshlash'
       },
       profile: {
-        backToLessons: '← Darslarga qaytish',
+        backToLessons: 'Darslarga qaytish',
         myProfile: 'Mening profilim',
         edit: 'Tahrirlash',
         username: 'Foydalanuvchi',
@@ -555,8 +798,7 @@ const resources = {
   }
 };
 
-// Accept 'uz' as alias for 'uz-latn' (some detectors use 'uz')
-(resources as any)['uz'] = resources['uz-latn'];
+// (resources as any)['uz'] = resources['uz-latn']; // alias for 'uz' (optional)
 
 i18n
   .use(LanguageDetector)
@@ -575,3 +817,4 @@ i18n
   });
 
 export default i18n;
+

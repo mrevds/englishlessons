@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate, Link } from 'react-router-dom';
 import { authAPI } from '../api/auth';
 import ThemeToggle from './ThemeToggle';
-import { validatePassword, validateUsername, validateEmail } from '../utils/validation';
+import { validatePassword, validateUsername } from '../utils/validation';
 
 const Register: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -12,7 +12,6 @@ const Register: React.FC = () => {
     password_confirm: '',
     first_name: '',
     last_name: '',
-    email: '',
     level: 5,
     level_letter: 'А',
   });
@@ -42,14 +41,7 @@ const Register: React.FC = () => {
       return;
     }
 
-    // Валидация email
-    if (formData.email) {
-      const emailValidation = validateEmail(formData.email);
-      if (!emailValidation.valid) {
-        setError(emailValidation.error || t('register.invalidEmail'));
-        return;
-      }
-    }
+
 
     // Валидация пароля
     const passwordValidation = validatePassword(formData.password);
@@ -134,16 +126,7 @@ const Register: React.FC = () => {
             </div>
           </div>
 
-          <div>
-            <label className="block text-gray-700 dark:text-gray-300 font-semibold mb-1.5 sm:mb-2 text-sm sm:text-base">{t('register.email')}</label>
-            <input
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              className="input-field text-sm sm:text-base"
-            />
-          </div>
+
 
           <div className="grid grid-cols-2 gap-2 sm:gap-4">
             <div>
@@ -155,7 +138,7 @@ const Register: React.FC = () => {
                 className="input-field text-sm sm:text-base"
                 required
               >
-                {Array.from({ length: 11 }, (_, i) => i + 1).map((num) => (
+                {Array.from({ length: 7 }, (_, i) => i + 5).map((num) => (
                   <option key={num} value={num}>
                     {num}
                   </option>

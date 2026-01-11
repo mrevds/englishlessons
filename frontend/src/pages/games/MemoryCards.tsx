@@ -3,6 +3,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import Layout from '../../components/Layout';
 import { Brain, ArrowLeft } from 'lucide-react';
 import { gamesAPI } from '../../api/games';
+import { useTranslation } from 'react-i18next';
 
 interface Card {
   id: number;
@@ -16,6 +17,7 @@ const MemoryCards: React.FC = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const levelParam = searchParams.get('level');
+  const { t } = useTranslation();
   const level = levelParam !== null ? Number(levelParam) : 0;
 
   const [cards, setCards] = useState<Card[]>([]);
@@ -230,24 +232,24 @@ const MemoryCards: React.FC = () => {
           <div className="card p-4 sm:p-8 text-center">
             <div className="text-4xl sm:text-6xl mb-3 sm:mb-4">🎉</div>
             <h2 className="text-xl sm:text-3xl font-bold text-gray-900 dark:text-white mb-3 sm:mb-4">
-              Поздравляем!
+              {t('games.memoryCards.congrats')}
             </h2>
             <div className="grid grid-cols-2 gap-3 sm:gap-6 max-w-md mx-auto mb-6 sm:mb-8">
               <div className="card p-3 sm:p-4">
                 <div className="text-xl sm:text-3xl font-bold text-blue-600 mb-1">{moves}</div>
-                <div className="text-sm sm:text-base text-gray-600 dark:text-gray-400">Ходов</div>
+                <div className="text-sm sm:text-base text-gray-600 dark:text-gray-400">{t('games.memoryCards.movesSimple')}</div>
               </div>
               <div className="card p-3 sm:p-4">
                 <div className="text-xl sm:text-3xl font-bold text-purple-600 mb-1">{getTimeTaken()}</div>
-                <div className="text-sm sm:text-base text-gray-600 dark:text-gray-400">Времени</div>
+                <div className="text-sm sm:text-base text-gray-600 dark:text-gray-400">{t('games.memoryCards.timeSimple')}</div>
               </div>
             </div>
             <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
               <button onClick={restartGame} className="btn-primary text-sm sm:text-base">
-                Играть снова
+                {t('games.memoryCards.playAgain')}
               </button>
               <button onClick={() => navigate('/games')} className="btn-secondary text-sm sm:text-base">
-                Выбрать другую игру
+                {t('games.memoryCards.chooseAnother')}
               </button>
             </div>
           </div>
@@ -264,7 +266,7 @@ const MemoryCards: React.FC = () => {
           className="btn-secondary mb-4 sm:mb-6 flex items-center gap-2 text-sm"
         >
           <ArrowLeft className="w-4 h-4" />
-          Назад к играм
+          {t('games.backToGames')}
         </button>
 
         <div className="card p-4 sm:p-6 mb-4 sm:mb-6">
@@ -272,15 +274,15 @@ const MemoryCards: React.FC = () => {
             <div className="flex items-center gap-2 sm:gap-3">
               <Brain className="w-6 h-6 sm:w-8 sm:h-8 text-purple-600" />
               <h1 className="text-lg sm:text-2xl font-bold text-gray-900 dark:text-white">
-                Memory Cards
+                {t('games.list.memory-cards.title')}
               </h1>
             </div>
             <div className="flex gap-4 sm:gap-6 text-sm sm:text-lg">
               <span className="text-gray-600 dark:text-gray-400">
-                Ходов: <strong>{moves}</strong>
+                {t('games.memoryCards.movesHeader')} <strong>{moves}</strong>
               </span>
               <span className="text-gray-600 dark:text-gray-400">
-                Пар: <strong>{matches} / 6</strong>
+                {t('games.memoryCards.pairsHeader')} <strong>{matches} / 6</strong>
               </span>
             </div>
           </div>

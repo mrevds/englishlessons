@@ -6,7 +6,7 @@ export interface RegisterData {
   password_confirm: string;
   first_name: string;
   last_name: string;
-  email: string;
+  email?: string;
   level: number;
   level_letter: string;
 }

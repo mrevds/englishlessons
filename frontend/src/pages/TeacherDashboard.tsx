@@ -211,7 +211,7 @@ const TeacherDashboard: React.FC = () => {
                   className="input-field text-sm py-1 px-2 w-24"
                 >
                   <option value="">{t('teacherDashboard.classLabel')}</option>
-                  {Array.from({ length: 11 }, (_, i) => i + 1).map((num) => (
+                  {Array.from({ length: 7 }, (_, i) => i + 5).map((num) => (
                     <option key={num} value={num}>{num} {t('teacherDashboard.classLabel')}</option>
                   ))}
                 </select>
@@ -389,7 +389,7 @@ const TeacherDashboard: React.FC = () => {
                     className="input-field text-sm"
                   >
                     <option value="">{t('teacherDashboard.allClasses')}</option>
-                    {Array.from({ length: 11 }, (_, i) => i + 1).map((num) => (
+                    {Array.from({ length: 7 }, (_, i) => i + 5).map((num) => (
                       <option key={num} value={num}>
                         {num}
                       </option>

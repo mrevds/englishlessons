@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import Layout from '../../components/Layout';
 import { Zap, ArrowLeft, Heart } from 'lucide-react';
@@ -187,11 +188,13 @@ const FillGapRace: React.FC = () => {
     startTimeRef.current = Date.now();
   };
 
+  const { t } = useTranslation();
+
   if (questions.length === 0) {
     return (
       <Layout>
         <div className="max-w-4xl mx-auto px-3 sm:px-4 py-4 sm:py-8 text-center">
-          <p>Загрузка...</p>
+          <p>{t('games.fillGapRace.loading')}</p>
         </div>
       </Layout>
     );
@@ -207,7 +210,7 @@ const FillGapRace: React.FC = () => {
             className="btn-secondary mb-4 sm:mb-6 flex items-center gap-2 text-sm"
           >
             <ArrowLeft className="w-4 h-4" />
-            Назад к играм
+            {t('games.fillGapRace.backToGames')}
           </button>
 
           <div className="card p-4 sm:p-8 text-center">
@@ -215,22 +218,22 @@ const FillGapRace: React.FC = () => {
               {lives > 0 ? '🎉' : '💔'}
             </div>
             <h2 className="text-xl sm:text-3xl font-bold text-gray-900 dark:text-white mb-3 sm:mb-4">
-              {lives > 0 ? 'Игра завершена!' : 'Game Over!'}
+              {lives > 0 ? t('games.fillGapRace.resultTitleWin') : t('games.fillGapRace.resultTitleLose')}
             </h2>
             <div className="text-3xl sm:text-5xl font-bold bg-gradient-to-r from-yellow-600 to-orange-600 bg-clip-text text-transparent mb-4 sm:mb-6">
               {score} {lives > 0 ? `/ ${questions.length}` : ''}
             </div>
             {percentage > 0 && (
               <p className="text-base sm:text-xl text-gray-600 dark:text-gray-400 mb-6 sm:mb-8">
-                Правильных ответов: {percentage}%
+                {t('games.fillGapRace.correctPercentage', { percentage })}
               </p>
             )}
             <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
               <button onClick={restartGame} className="btn-primary text-sm sm:text-base">
-                Играть снова
+                {t('games.fillGapRace.playAgain')}
               </button>
               <button onClick={() => navigate('/games')} className="btn-secondary text-sm sm:text-base">
-                Выбрать другую игру
+                {t('games.fillGapRace.chooseAnother')}
               </button>
             </div>
           </div>
@@ -250,7 +253,7 @@ const FillGapRace: React.FC = () => {
           className="btn-secondary mb-4 sm:mb-6 flex items-center gap-2 text-sm"
         >
           <ArrowLeft className="w-4 h-4" />
-          Назад к играм
+          {t('games.fillGapRace.backToGames')}
         </button>
 
         <div className="card p-4 sm:p-6 mb-4 sm:mb-6">
@@ -258,7 +261,7 @@ const FillGapRace: React.FC = () => {
             <div className="flex items-center gap-2 sm:gap-3">
               <Zap className="w-6 h-6 sm:w-8 sm:h-8 text-yellow-600" />
               <h1 className="text-lg sm:text-2xl font-bold text-gray-900 dark:text-white">
-                Fill the Gap Race
+                {t('games.fillGapRace.title')}
               </h1>
             </div>
             <div className="flex items-center gap-2 sm:gap-4">
@@ -274,10 +277,10 @@ const FillGapRace: React.FC = () => {
 
           <div className="flex items-center justify-between">
             <span className="text-sm sm:text-base text-gray-600 dark:text-gray-400">
-              Вопрос {currentQuestion + 1} / {questions.length}
+              {t('games.fillGapRace.questionCounter', { current: currentQuestion + 1, total: questions.length })}
             </span>
             <span className="text-sm sm:text-lg font-semibold">
-              Очки: {score}
+              {t('games.fillGapRace.points', { score })}
             </span>
           </div>
 
@@ -291,7 +294,7 @@ const FillGapRace: React.FC = () => {
 
         <div className="card p-4 sm:p-8">
           <h2 className="text-lg sm:text-3xl font-semibold text-gray-900 dark:text-white mb-4 sm:mb-8 text-center leading-relaxed">
-            {question.sentence.split('___').map((part, i, arr) => (
+            {question.sentence.split('___').map((part: string, i: number, arr: string[]) => (
               <React.Fragment key={i}>
                 {part}
                 {i < arr.length - 1 && (
@@ -308,7 +311,7 @@ const FillGapRace: React.FC = () => {
           </h2>
 
           <div className="grid grid-cols-2 gap-2 sm:gap-4 mb-4 sm:mb-6">
-            {question.options.map((option, index) => {
+            {question.options.map((option: string, index: number) => {
               const isSelected = selectedAnswer === option;
               const isCorrectOption = option === question.correctAnswer;
               
@@ -342,16 +345,16 @@ const FillGapRace: React.FC = () => {
             }`}>
               <div className="text-lg sm:text-2xl font-bold mb-2">
                 {selectedAnswer === 'TIMEOUT' ? (
-                  <span className="text-orange-700 dark:text-orange-400">⏰ Время вышло!</span>
+                  <span className="text-orange-700 dark:text-orange-400">{t('games.fillGapRace.timeoutMessage')}</span>
                 ) : isCorrect ? (
-                  <span className="text-green-700 dark:text-green-400">✅ Правильно! +1 очко</span>
+                  <span className="text-green-700 dark:text-green-400">{t('games.fillGapRace.correctMessage')}</span>
                 ) : (
-                  <span className="text-red-700 dark:text-red-400">❌ Неправильно! -1 жизнь</span>
+                  <span className="text-red-700 dark:text-red-400">{t('games.fillGapRace.wrongMessage')}</span>
                 )}
               </div>
               {!isCorrect && (
                 <p className="text-sm sm:text-base text-gray-700 dark:text-gray-300">
-                  Правильный ответ: <strong>{question.correctAnswer}</strong>
+                  {t('games.fillGapRace.correctAnswerLabel')} <strong>{question.correctAnswer}</strong>
                 </p>
               )}
             </div>
@@ -359,7 +362,7 @@ const FillGapRace: React.FC = () => {
 
           {showResult && (
             <button onClick={handleNext} className="btn-primary w-full text-base sm:text-xl py-3 sm:py-4">
-              {currentQuestion < questions.length - 1 ? 'Следующий вопрос' : 'Завершить'}
+              {currentQuestion < questions.length - 1 ? t('games.fillGapRace.nextQuestion') : t('games.fillGapRace.finish')}
             </button>
           )}
         </div>

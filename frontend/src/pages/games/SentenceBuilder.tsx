@@ -3,6 +3,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import Layout from '../../components/Layout';
 import { Puzzle, ArrowLeft, CheckCircle, XCircle, RotateCcw } from 'lucide-react';
 import { gamesAPI } from '../../api/games';
+import { useTranslation } from 'react-i18next';
 
 interface Question {
   words: string[];
@@ -15,6 +16,7 @@ const SentenceBuilder: React.FC = () => {
   const [searchParams] = useSearchParams();
   const levelParam = searchParams.get('level');
   const level = levelParam !== null ? Number(levelParam) : 0;
+  const { t } = useTranslation();
 
   const [questions, setQuestions] = useState<Question[]>([]);
   const [currentQuestion, setCurrentQuestion] = useState(0);
@@ -205,7 +207,7 @@ const SentenceBuilder: React.FC = () => {
     return (
       <Layout>
         <div className="max-w-4xl mx-auto px-4 py-8 text-center">
-          <p>Загрузка...</p>
+          <p>{t('games.sentenceBuilder.loading')}</p>
         </div>
       </Layout>
     );
@@ -221,7 +223,7 @@ const SentenceBuilder: React.FC = () => {
             className="btn-secondary mb-4 sm:mb-6 flex items-center gap-2 text-sm"
           >
             <ArrowLeft className="w-4 h-4" />
-            Назад к играм
+            {t('games.backToGames')}
           </button>
 
           <div className="card p-4 sm:p-8 text-center">
@@ -229,13 +231,13 @@ const SentenceBuilder: React.FC = () => {
               {percentage >= 80 ? '🎉' : percentage >= 60 ? '👍' : '💪'}
             </div>
             <h2 className="text-xl sm:text-3xl font-bold text-gray-900 dark:text-white mb-3 sm:mb-4">
-              Отлично!
+              {t('games.sentenceBuilder.resultTitle')}
             </h2>
             <div className="text-3xl sm:text-5xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-4 sm:mb-6">
-              {score} / {questions.length}
+              {t('games.sentenceBuilder.scoreDisplay', { score, total: questions.length })}
             </div>
             <p className="text-base sm:text-xl text-gray-600 dark:text-gray-400 mb-6 sm:mb-8">
-              Правильных ответов: {percentage}%
+              {t('games.sentenceBuilder.correctPercentage', { percentage })}
             </p>
             <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
               <button onClick={restartGame} className="btn-primary text-sm sm:text-base">
@@ -269,16 +271,16 @@ const SentenceBuilder: React.FC = () => {
           <div className="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4">
             <Puzzle className="w-6 h-6 sm:w-8 sm:h-8 text-blue-600" />
             <h1 className="text-lg sm:text-2xl font-bold text-gray-900 dark:text-white">
-              Sentence Builder
+              {t('games.list.sentence-builder.title')}
             </h1>
           </div>
 
           <div className="flex items-center justify-between mb-3 sm:mb-4">
             <span className="text-sm sm:text-base text-gray-600 dark:text-gray-400">
-              Предложение {currentQuestion + 1} / {questions.length}
+              {t('games.sentenceBuilder.questionCounter', { current: currentQuestion + 1, total: questions.length })}
             </span>
             <span className="text-sm sm:text-lg font-semibold">
-              Очки: {score}
+              {t('games.sentenceBuilder.points', { score })}
             </span>
           </div>
           <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2 mb-4 sm:mb-6">
@@ -291,15 +293,15 @@ const SentenceBuilder: React.FC = () => {
 
         <div className="card p-4 sm:p-8">
           <h2 className="text-base sm:text-xl font-semibold text-gray-900 dark:text-white mb-2 text-center">
-            Собери предложение:
+            {t('games.sentenceBuilder.prompt')}
           </h2>
           <p className="text-gray-600 dark:text-gray-400 text-center mb-6 sm:mb-8 text-sm sm:text-lg">
-            {question.translation}
+            <strong>{t('games.sentenceBuilder.translationLabel')}</strong> {question.translation}
           </p>
 
           {/* Selected words area */}
           <div className="min-h-[80px] sm:min-h-[120px] p-3 sm:p-6 bg-blue-50 dark:bg-blue-900/20 rounded-xl mb-4 sm:mb-6 border-2 border-blue-200 dark:border-blue-800">
-            <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mb-2 sm:mb-3">Твой ответ:</p>
+            <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mb-2 sm:mb-3">{t('games.sentenceBuilder.yourAnswer')}</p>
             <div className="flex flex-wrap gap-2 sm:gap-3 min-h-[40px] sm:min-h-[60px]">
               {selectedWords.map((wordIndex, i) => (
                 <button
@@ -316,7 +318,7 @@ const SentenceBuilder: React.FC = () => {
 
           {/* Available words */}
           <div className="p-3 sm:p-6 bg-gray-50 dark:bg-gray-800 rounded-xl mb-4 sm:mb-6">
-            <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mb-2 sm:mb-3">Доступные слова:</p>
+            <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mb-2 sm:mb-3">{t('games.sentenceBuilder.availableWords')}</p>
             <div className="flex flex-wrap gap-2 sm:gap-3 min-h-[40px] sm:min-h-[60px]">
               {availableWords.map((wordIndex, i) => (
                 <button
@@ -343,21 +345,21 @@ const SentenceBuilder: React.FC = () => {
                   <>
                     <CheckCircle className="w-5 h-5 sm:w-6 sm:h-6 text-green-600" />
                     <span className="text-base sm:text-xl font-bold text-green-700 dark:text-green-400">
-                      Правильно! +1 очко
+                      {t('games.sentenceBuilder.correctMessage')}
                     </span>
                   </>
                 ) : (
                   <>
                     <XCircle className="w-5 h-5 sm:w-6 sm:h-6 text-red-600" />
                     <span className="text-base sm:text-xl font-bold text-red-700 dark:text-red-400">
-                      Неправильно
+                      {t('games.sentenceBuilder.wrongMessage')}
                     </span>
                   </>
                 )}
               </div>
               {!isCorrect && (
                 <p className="text-sm sm:text-base text-gray-700 dark:text-gray-300">
-                  <strong>Правильно:</strong>{' '}
+                  <strong>{t('games.sentenceBuilder.correctAnswerLabel')}</strong>{' '}
                   {question.correctOrder.map((i) => question.words[i]).join(' ')}
                 </p>
               )}
@@ -373,19 +375,19 @@ const SentenceBuilder: React.FC = () => {
                   disabled={selectedWords.length !== question.words.length}
                   className="btn-primary disabled:opacity-50 text-sm sm:text-base"
                 >
-                  Проверить
+                  {t('games.sentenceBuilder.checkBtn')}
                 </button>
                 <button
                   onClick={handleReset}
                   className="btn-secondary flex items-center justify-center gap-2 text-sm sm:text-base"
                 >
                   <RotateCcw className="w-4 h-4" />
-                  Сбросить
+                  {t('games.sentenceBuilder.resetBtn')}
                 </button>
               </>
             ) : (
               <button onClick={handleNext} className="btn-primary text-sm sm:text-base">
-                {currentQuestion < questions.length - 1 ? 'Следующее предложение' : 'Завершить'}
+                {currentQuestion < questions.length - 1 ? t('games.sentenceBuilder.nextQuestion') : t('games.sentenceBuilder.finish')}
               </button>
             )}
           </div>

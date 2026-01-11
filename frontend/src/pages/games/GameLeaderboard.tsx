@@ -5,6 +5,7 @@ import { gamesAPI, gameNames, levelNames } from '../../api/games';
 import type { GameResult, GameSummary } from '../../api/games';
 import { Trophy, ArrowLeft, Medal, Gamepad2, Loader2, Star, Clock, Zap, Users } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
+import { useTranslation } from 'react-i18next';
 
 interface LeaderboardEntry {
   id: number;
@@ -23,6 +24,7 @@ interface LeaderboardEntry {
 const GameLeaderboard: React.FC = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
+  const { t } = useTranslation();
   const [mySummary, setMySummary] = useState<GameSummary | null>(null);
   const [myRecentGames, setMyRecentGames] = useState<GameResult[]>([]);
   const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([]);
@@ -125,22 +127,22 @@ const GameLeaderboard: React.FC = () => {
           className="btn-secondary mb-4 flex items-center gap-2"
         >
           <ArrowLeft className="w-4 h-4" />
-          К играм
+          {t('games.backToGames')}
         </button>
 
         <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-center mb-4 sm:mb-6 flex items-center justify-center gap-2 sm:gap-3">
           <Trophy className="w-6 h-6 sm:w-8 sm:h-8 text-yellow-500" />
           <span className="bg-gradient-to-r from-yellow-500 to-orange-500 bg-clip-text text-transparent">
-            Рейтинг и результаты
+            {t('games.leaderboard.header')}
           </span>
         </h1>
 
         {/* Моё место в рейтинге текущего уровня */}
         {myRankInLevel && (
           <div className="bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500 text-white p-3 sm:p-4 rounded-xl sm:rounded-2xl mb-4 sm:mb-6 text-center shadow-lg">
-            <div className="text-xs sm:text-sm opacity-90">Твоё место в {gameNames[selectedGame]} (Ур. {selectedLevel})</div>
+            <div className="text-xs sm:text-sm opacity-90">{t('games.leaderboard.myRank', { game: gameNames[selectedGame], level: selectedLevel })}</div>
             <div className="text-3xl sm:text-5xl font-bold my-1 sm:my-2">#{myRankInLevel}</div>
-            <div className="text-xs sm:text-sm opacity-80">из {leaderboard.length} игроков</div>
+            <div className="text-xs sm:text-sm opacity-80">{t('games.leaderboard.outOf', { count: leaderboard.length })}</div>
           </div>
         )}
 
@@ -150,22 +152,22 @@ const GameLeaderboard: React.FC = () => {
             <div className="bg-gradient-to-br from-purple-500 to-pink-600 text-white p-2 sm:p-4 rounded-xl sm:rounded-2xl text-center shadow-lg">
               <Gamepad2 className="w-5 h-5 sm:w-8 sm:h-8 mx-auto mb-1 sm:mb-2 opacity-80" />
               <div className="text-xl sm:text-3xl font-bold">{mySummary.total_games}</div>
-              <div className="text-purple-100 text-xs sm:text-sm">Всего игр</div>
+              <div className="text-purple-100 text-xs sm:text-sm">{t('games.leaderboard.totalGamesLabel')}</div>
             </div>
             <div className="bg-gradient-to-br from-blue-500 to-cyan-600 text-white p-2 sm:p-4 rounded-xl sm:rounded-2xl text-center shadow-lg">
               <Star className="w-5 h-5 sm:w-8 sm:h-8 mx-auto mb-1 sm:mb-2 opacity-80" />
               <div className="text-xl sm:text-3xl font-bold">{mySummary.avg_percentage.toFixed(0)}%</div>
-              <div className="text-blue-100 text-xs sm:text-sm">Средний балл</div>
+              <div className="text-blue-100 text-xs sm:text-sm">{t('games.leaderboard.avgScoreLabel')}</div>
             </div>
             <div className="bg-gradient-to-br from-green-500 to-teal-600 text-white p-2 sm:p-4 rounded-xl sm:rounded-2xl text-center shadow-lg">
               <Clock className="w-5 h-5 sm:w-8 sm:h-8 mx-auto mb-1 sm:mb-2 opacity-80" />
               <div className="text-xl sm:text-3xl font-bold">{formatTotalTime(mySummary.total_time)}</div>
-              <div className="text-green-100 text-xs sm:text-sm">Время игры</div>
+              <div className="text-green-100 text-xs sm:text-sm">{t('games.leaderboard.totalTimeLabel')}</div>
             </div>
             <div className="bg-gradient-to-br from-orange-500 to-red-600 text-white p-2 sm:p-4 rounded-xl sm:rounded-2xl text-center shadow-lg">
               <Zap className="w-5 h-5 sm:w-8 sm:h-8 mx-auto mb-1 sm:mb-2 opacity-80" />
               <div className="text-xl sm:text-3xl font-bold">{Object.keys(mySummary.games_played || {}).length}/5</div>
-              <div className="text-orange-100 text-xs sm:text-sm">Типов игр</div>
+              <div className="text-orange-100 text-xs sm:text-sm">{t('games.leaderboard.gameTypesLabel')}</div>
             </div>
           </div>
         )}
@@ -181,8 +183,8 @@ const GameLeaderboard: React.FC = () => {
             }`}
           >
             <Users className="w-4 h-4 sm:w-5 sm:h-5" />
-            <span className="hidden xs:inline">Рейтинг</span>
-            <span className="xs:hidden">Рейтинг</span>
+            <span className="hidden xs:inline">{t('games.tabs.ranking')}</span>
+            <span className="xs:hidden">{t('games.tabs.ranking')}</span>
           </button>
           <button
             onClick={() => setActiveTab('history')}
@@ -193,8 +195,8 @@ const GameLeaderboard: React.FC = () => {
             }`}
           >
             <Clock className="w-4 h-4 sm:w-5 sm:h-5" />
-            <span className="hidden xs:inline">История</span>
-            <span className="xs:hidden">История</span>
+            <span className="hidden xs:inline">{t('games.tabs.history')}</span>
+            <span className="xs:hidden">{t('games.tabs.history')}</span>
           </button>
         </div>
 
@@ -203,13 +205,13 @@ const GameLeaderboard: React.FC = () => {
           <div className="card mb-6">
             <h2 className="text-lg font-bold mb-4 flex items-center gap-2">
               <Trophy className="w-5 h-5 text-yellow-500" />
-              Рейтинг по уровням
+              {t('games.leaderboard.rankingByLevels')}
             </h2>
             
             {/* Фильтры */}
             <div className="grid grid-cols-2 gap-3 mb-4">
               <div>
-                <label className="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1">Игра</label>
+                <label className="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1">{t('games.filters.game')}</label>
                 <select
                   value={selectedGame}
                   onChange={(e) => setSelectedGame(e.target.value)}
@@ -221,7 +223,7 @@ const GameLeaderboard: React.FC = () => {
                 </select>
               </div>
               <div>
-                <label className="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1">Уровень</label>
+                <label className="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1">{t('games.filters.level')}</label>
                 <select
                   value={selectedLevel}
                   onChange={(e) => setSelectedLevel(Number(e.target.value))}
@@ -229,7 +231,7 @@ const GameLeaderboard: React.FC = () => {
                 >
                   {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((lvl) => (
                     <option key={lvl} value={lvl}>
-                      {lvl}. {levelNames[lvl] || `Level ${lvl}`}
+                      {lvl}. {t(`games.levels.${lvl}.label`, { defaultValue: levelNames[lvl] || `Level ${lvl}` })}
                     </option>
                   ))}
                 </select>
@@ -243,8 +245,8 @@ const GameLeaderboard: React.FC = () => {
             ) : leaderboard.length === 0 ? (
               <div className="text-center py-8">
                 <Trophy className="w-12 h-12 mx-auto mb-2 text-gray-300" />
-                <p className="text-gray-500">Пока никто не играл на этом уровне</p>
-                <p className="text-sm text-gray-400 mt-1">Будь первым!</p>
+                <p className="text-gray-500">{t('games.leaderboard.noOneYet')}</p>
+                <p className="text-sm text-gray-400 mt-1">{t('games.leaderboard.beFirst')}</p>
               </div>
             ) : (
               <div className="space-y-2">
@@ -252,7 +254,7 @@ const GameLeaderboard: React.FC = () => {
                   const isMe = user && entry.user_id === user.id;
                   const displayName = entry.user 
                     ? `${entry.user.first_name} ${entry.user.last_name}`.trim() || entry.user.username
-                    : 'Игрок';
+                    : t('games.leaderboard.player');
                   return (
                     <div
                       key={entry.id}
@@ -272,7 +274,7 @@ const GameLeaderboard: React.FC = () => {
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className={`text-sm sm:text-base font-semibold truncate ${isMe ? 'text-orange-700 dark:text-orange-300' : ''}`}>
-                          {displayName} {isMe && '(ты)'}
+                          {displayName} {isMe && ` ${t('games.leaderboard.you')}`}
                         </div>
                         <div className="text-[10px] sm:text-xs text-gray-600 dark:text-gray-400">
                           {entry.percentage.toFixed(0)}% • {entry.time_spent}с
@@ -298,7 +300,7 @@ const GameLeaderboard: React.FC = () => {
               <div className="card mb-6">
                 <h2 className="text-lg font-bold mb-4 flex items-center gap-2">
                   <Medal className="w-5 h-5 text-yellow-500" />
-                  Прогресс по играм
+                  {t('games.leaderboard.progressByGames')}
                 </h2>
                 <div className="space-y-3">
                   {Object.entries(mySummary.games_played).map(([gameType, count]) => (
@@ -325,18 +327,18 @@ const GameLeaderboard: React.FC = () => {
             <div className="card">
               <h2 className="text-lg font-bold mb-4 flex items-center gap-2">
                 <Clock className="w-5 h-5 text-blue-500" />
-                Последние игры
+                {t('games.leaderboard.recentGamesTitle')}
               </h2>
 
               {myRecentGames.length === 0 ? (
                 <div className="text-center py-8">
                   <Gamepad2 className="w-16 h-16 mx-auto mb-3 text-gray-300" />
-                  <p className="text-gray-500 mb-4">Вы ещё не играли</p>
+                  <p className="text-gray-500 mb-4">{t('games.leaderboard.notPlayed')}</p>
                   <button
                     onClick={() => navigate('/games')}
                     className="btn-primary"
                   >
-                    🎮 Начать играть!
+                    {t('games.leaderboard.startPlaying')}
                   </button>
                 </div>
               ) : (
@@ -374,7 +376,7 @@ const GameLeaderboard: React.FC = () => {
             onClick={() => navigate('/games')}
             className="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-6 sm:px-8 py-2 sm:py-3 rounded-lg sm:rounded-xl font-bold text-base sm:text-lg shadow-lg hover:from-purple-700 hover:to-pink-700 transition-all"
           >
-            🎮 Играть ещё!
+            {t('games.playMore') }
           </button>
         </div>
       </div>

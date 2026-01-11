@@ -71,15 +71,26 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
               <ThemeToggle />
 
               <div className="ml-2">
-                <select
-                  aria-label={t('nav.languageSelector')}
-                  value={i18n.language || 'ru'}
-                  onChange={(e) => changeLanguage(e.target.value)}
-                  className="bg-transparent border border-gray-200 dark:border-gray-700 rounded px-2 py-1 text-sm"
-                >
-                  <option value="ru">{t('nav.lang_ru')}</option>
-                  <option value="uz-latn">{t('nav.lang_uz')}</option>
-                </select>
+                <div role="tablist" aria-label={t('nav.languageSelector')} className="inline-flex rounded-md overflow-hidden border border-gray-200 dark:border-gray-700">
+                  <button
+                    type="button"
+                    role="tab"
+                    aria-selected={i18n.language === 'ru'}
+                    onClick={() => changeLanguage('ru')}
+                    className={`px-3 py-1 text-sm ${i18n.language === 'ru' ? 'bg-gray-100 dark:bg-gray-700 font-semibold' : 'bg-transparent'}`}
+                  >
+                    {t('nav.lang_ru')}
+                  </button>
+                  <button
+                    type="button"
+                    role="tab"
+                    aria-selected={i18n.language === 'uz-latn' || (i18n.language || '').startsWith('uz')}
+                    onClick={() => changeLanguage('uz-latn')}
+                    className={`px-3 py-1 text-sm ${i18n.language === 'uz-latn' || (i18n.language || '').startsWith('uz') ? 'bg-gray-100 dark:bg-gray-700 font-semibold' : 'bg-transparent'}`}
+                  >
+                    {t('nav.lang_uz')}
+                  </button>
+                </div>
               </div>
 
               <button onClick={logout} className="btn-secondary text-xs sm:text-sm py-2 px-3">
@@ -135,15 +146,22 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                 </button>
               )}
               <div className="px-4">
-                <select
-                  aria-label={t('nav.languageSelector')}
-                  value={i18n.language || 'ru'}
-                  onChange={(e) => { changeLanguage(e.target.value); setMobileMenuOpen(false); }}
-                  className="w-full bg-transparent border border-gray-200 dark:border-gray-700 rounded px-2 py-2 text-sm mb-3"
-                >
-                  <option value="ru">{t('nav.lang_ru')}</option>
-                  <option value="uz-latn">{t('nav.lang_uz')}</option>
-                </select>
+                <div className="w-full inline-flex rounded-md overflow-hidden border border-gray-200 dark:border-gray-700 mb-3">
+                  <button
+                    type="button"
+                    onClick={() => { changeLanguage('ru'); setMobileMenuOpen(false); }}
+                    className={`flex-1 px-3 py-2 text-sm ${i18n.language === 'ru' ? 'bg-gray-100 dark:bg-gray-700 font-semibold' : 'bg-transparent'}`}
+                  >
+                    {t('nav.lang_ru')}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => { changeLanguage('uz-latn'); setMobileMenuOpen(false); }}
+                    className={`flex-1 px-3 py-2 text-sm ${i18n.language === 'uz-latn' || (i18n.language || '').startsWith('uz') ? 'bg-gray-100 dark:bg-gray-700 font-semibold' : 'bg-transparent'}`}
+                  >
+                    {t('nav.lang_uz')}
+                  </button>
+                </div>
 
                 <button
                   onClick={() => { logout(); setMobileMenuOpen(false); }}

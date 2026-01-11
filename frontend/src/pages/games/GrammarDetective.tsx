@@ -3,6 +3,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import Layout from '../../components/Layout';
 import { Target, ArrowLeft, CheckCircle, XCircle } from 'lucide-react';
 import { gamesAPI } from '../../api/games';
+import { useTranslation } from 'react-i18next';
 
 interface Question {
   sentence: string;
@@ -14,6 +15,7 @@ interface Question {
 const GrammarDetective: React.FC = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
+  const { t } = useTranslation();
   const levelParam = searchParams.get('level');
   const level = levelParam !== null ? Number(levelParam) : 0;
 
@@ -175,7 +177,7 @@ const GrammarDetective: React.FC = () => {
     return (
       <Layout>
         <div className="max-w-4xl mx-auto px-3 sm:px-4 py-4 sm:py-8 text-center">
-          <p>Загрузка...</p>
+          <p>{t('games.grammarDetective.loading')}</p>
         </div>
       </Layout>
     );
@@ -199,20 +201,20 @@ const GrammarDetective: React.FC = () => {
               {percentage >= 80 ? '🎉' : percentage >= 60 ? '👍' : '💪'}
             </div>
             <h2 className="text-xl sm:text-3xl font-bold text-gray-900 dark:text-white mb-3 sm:mb-4">
-              Игра завершена!
+              {t('games.grammarDetective.resultTitle')}
             </h2>
             <div className="text-3xl sm:text-5xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-4 sm:mb-6">
               {score} / {questions.length}
             </div>
             <p className="text-base sm:text-xl text-gray-600 dark:text-gray-400 mb-6 sm:mb-8">
-              Правильных ответов: {percentage}%
+              {t('games.grammarDetective.correctPercentage', { percentage })}
             </p>
             <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
               <button onClick={restartGame} className="btn-primary text-sm sm:text-base">
-                Играть снова
+                {t('games.grammarDetective.playAgain')}
               </button>
               <button onClick={() => navigate('/games')} className="btn-secondary text-sm sm:text-base">
-                Выбрать другую игру
+                {t('games.grammarDetective.chooseAnother')}
               </button>
             </div>
           </div>
@@ -241,17 +243,17 @@ const GrammarDetective: React.FC = () => {
           <div className="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4">
             <Target className="w-6 h-6 sm:w-8 sm:h-8 text-red-600" />
             <h1 className="text-lg sm:text-2xl font-bold text-gray-900 dark:text-white">
-              Grammar Detective
+              {t('games.list.grammar-detective.title')}
             </h1>
           </div>
 
           {/* Progress */}
           <div className="flex items-center justify-between mb-3 sm:mb-4">
             <span className="text-sm sm:text-base text-gray-600 dark:text-gray-400">
-              Вопрос {currentQuestion + 1} / {questions.length}
+              {t('games.grammarDetective.questionCounter', { current: currentQuestion + 1, total: questions.length })}
             </span>
             <span className="text-sm sm:text-lg font-semibold">
-              Очки: {score}
+              {t('games.grammarDetective.points', { score })}
             </span>
           </div>
           <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2 mb-4 sm:mb-6">
@@ -265,7 +267,7 @@ const GrammarDetective: React.FC = () => {
         {/* Question */}
         <div className="card p-4 sm:p-8">
           <h2 className="text-base sm:text-xl font-semibold text-gray-900 dark:text-white mb-4 sm:mb-6 text-center">
-            Найди ошибку в предложении:
+            {t('games.grammarDetective.findErrorLabel')}
           </h2>
 
           {/* Sentence with clickable words */}
@@ -304,20 +306,20 @@ const GrammarDetective: React.FC = () => {
                   <>
                     <CheckCircle className="w-5 h-5 sm:w-6 sm:h-6 text-green-600" />
                     <span className="text-base sm:text-xl font-bold text-green-700 dark:text-green-400">
-                      Правильно! +1 очко
+                      {t('games.grammarDetective.correctMessage')}
                     </span>
                   </>
                 ) : (
                   <>
                     <XCircle className="w-5 h-5 sm:w-6 sm:h-6 text-red-600" />
                     <span className="text-base sm:text-xl font-bold text-red-700 dark:text-red-400">
-                      Неправильно
+                      {t('games.grammarDetective.wrongMessage')}
                     </span>
                   </>
                 )}
               </div>
               <p className="text-sm sm:text-base text-gray-700 dark:text-gray-300 mb-1 sm:mb-2">
-                <strong>Правильно:</strong> {question.correctWord}
+                <strong>{t('games.grammarDetective.correctAnswerLabel')}</strong> {question.correctWord}
               </p>
               <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400">
                 {question.explanation}
@@ -333,11 +335,11 @@ const GrammarDetective: React.FC = () => {
                 disabled={selectedWordIndex === null}
                 className="btn-primary disabled:opacity-50 text-sm sm:text-base"
               >
-                Проверить
+                {t('games.grammarDetective.checkBtn')}
               </button>
             ) : (
               <button onClick={handleNext} className="btn-primary text-sm sm:text-base">
-                {currentQuestion < questions.length - 1 ? 'Следующий вопрос' : 'Завершить'}
+                {currentQuestion < questions.length - 1 ? t('games.grammarDetective.nextQuestion') : t('games.grammarDetective.finish')}
               </button>
             )}
           </div>
