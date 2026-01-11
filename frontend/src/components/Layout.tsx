@@ -35,11 +35,6 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     }
   };
 
-  const toggleLanguage = () => {
-    const newLng = (lang || '').startsWith('uz') ? 'ru' : 'uz-latn';
-    changeLanguage(newLng);
-  };
-
   return (
     <div className="min-h-screen">
       {/* Header */}
@@ -92,30 +87,14 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
               <ThemeToggle />
 
               <div className="ml-2">
-                <div className="inline-flex rounded-lg overflow-hidden border border-gray-300 dark:border-gray-600 shadow-sm">
-                  <button
-                    type="button"
-                    onClick={toggleLanguage}
-                    className={`px-3 py-1.5 text-sm font-medium transition-colors ${
-                      lang === 'uz-latn' || (lang || '').startsWith('uz')
-                        ? 'btn-primary'
-                        : 'btn-secondary'
-                    }`}
-                  >
-                    UZ
-                  </button>
-                  <button
-                    type="button"
-                    onClick={toggleLanguage}
-                    className={`px-3 py-1.5 text-sm font-medium transition-colors ${
-                      lang === 'ru'
-                        ? 'btn-primary'
-                        : 'btn-secondary'
-                    }`}
-                  >
-                    RU
-                  </button>
-                </div>
+                <select
+                  value={lang}
+                  onChange={(e) => changeLanguage(e.target.value)}
+                  className="px-3 py-1.5 text-sm font-medium rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  <option value="ru">🇷🇺 RU</option>
+                  <option value="uz-latn">🇺🇿 UZ</option>
+                </select>
               </div>
 
               <button onClick={logout} className="btn-secondary text-xs sm:text-sm py-2 px-3">
@@ -171,30 +150,14 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                 </button>
               )}
               <div className="px-4">
-                <div className="w-full inline-flex rounded-lg overflow-hidden border border-gray-300 dark:border-gray-600 shadow-sm mb-3">
-                  <button
-                    type="button"
-                    onClick={() => { changeLanguage('ru'); setMobileMenuOpen(false); }}
-                    className={`flex-1 px-3 py-2 text-sm font-medium transition-colors ${
-                      lang === 'uz-latn' || (lang || '').startsWith('uz')
-                        ? 'bg-blue-600 text-white'
-                        : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
-                    }`}
-                  >
-                    UZ
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => { changeLanguage('uz-latn'); setMobileMenuOpen(false); }}
-                    className={`flex-1 px-3 py-2 text-sm font-medium transition-colors ${
-                      lang === 'ru'
-                        ? 'bg-blue-600 text-white'
-                        : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
-                    }`}
-                  >
-                    RU
-                  </button>
-                </div>
+                <select
+                  value={lang}
+                  onChange={(e) => { changeLanguage(e.target.value); setMobileMenuOpen(false); }}
+                  className="w-full px-3 py-2 text-sm font-medium rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 mb-3"
+                >
+                  <option value="ru">🇷🇺 RU</option>
+                  <option value="uz-latn">🇺🇿 UZ</option>
+                </select>
 
                 <button
                   onClick={() => { logout(); setMobileMenuOpen(false); }}
