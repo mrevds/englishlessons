@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '../context/AuthContext';
 import apiClient from '../api/client';
 import { Loader2 } from 'lucide-react';
@@ -35,6 +36,7 @@ const ClassAnalytics: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [selectedLevel, setSelectedLevel] = useState(user?.level?.toString() || '');
   const [selectedLetter, setSelectedLetter] = useState(user?.level_letter || '');
+  const { t } = useTranslation();
 
   // Кеш для данных аналитики
   const [cache, setCache] = useState<Map<string, { data: ClassAnalyticsData; timestamp: number }>>(new Map());
@@ -73,7 +75,7 @@ const ClassAnalytics: React.FC = () => {
       setCache(prev => new Map(prev).set(cacheKey, { data, timestamp: now }));
     } catch (error) {
       console.error('Error loading analytics:', error);
-      setError('Ошибка при загрузке аналитики');
+      setError(t('classAnalytics.errorLoading'));
     } finally {
       setLoading(false);
     }
@@ -104,20 +106,20 @@ const ClassAnalytics: React.FC = () => {
       document.body.removeChild(a);
     } catch (error) {
       console.error(`Error exporting ${format}:`, error);
-      alert('Ошибка при экспорте файла');
+      alert(t('classAnalytics.exportError'));
     }
   };
 
   return (
     <div className="card">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 sm:gap-0 mb-4 sm:mb-6">
-        <h2 className="text-lg sm:text-2xl font-bold">📈 Аналитика класса</h2>
+        <h2 className="text-lg sm:text-2xl font-bold">📈 {t('classAnalytics.title')}</h2>
         <div className="flex gap-2">
           <button onClick={() => handleExport('csv')} className="btn-secondary text-xs sm:text-sm py-2 px-3">
-            📥 CSV
+            📥 {t('classAnalytics.csv')}
           </button>
           <button onClick={() => handleExport('excel')} className="btn-primary text-xs sm:text-sm py-2 px-3">
-            📥 Excel
+            📥 {t('classAnalytics.excel')}
           </button>
         </div>
       </div>
@@ -125,13 +127,13 @@ const ClassAnalytics: React.FC = () => {
       {/* Фильтры */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
         <div>
-          <label className="block text-sm font-semibold mb-1">Класс</label>
+          <label className="block text-sm font-semibold mb-1">{t('classAnalytics.classLabel')}</label>
           <select
             value={selectedLevel}
             onChange={(e) => setSelectedLevel(e.target.value)}
             className="input-field text-sm"
           >
-            <option value="">Выберите класс</option>
+            <option value="">{t('classAnalytics.chooseClass')}</option>
             {Array.from({ length: 11 }, (_, i) => i + 1).map((num) => (
               <option key={num} value={num}>
                 {num}
@@ -140,13 +142,13 @@ const ClassAnalytics: React.FC = () => {
           </select>
         </div>
         <div>
-          <label className="block text-sm font-semibold mb-1">Буква</label>
+          <label className="block text-sm font-semibold mb-1">{t('classAnalytics.letterLabel')}</label>
           <select
             value={selectedLetter}
             onChange={(e) => setSelectedLetter(e.target.value)}
             className="input-field text-sm"
           >
-            <option value="">Все буквы</option>
+            <option value="">{t('classAnalytics.allLetters')}</option>
             {['А', 'Б', 'В', 'Г', 'Д', 'Е', 'Ж', 'З'].map((letter) => (
               <option key={letter} value={letter}>
                 {letter}
@@ -164,27 +166,27 @@ const ClassAnalytics: React.FC = () => {
       ) : error ? (
         <div className="text-red-500 text-center py-4">{error}</div>
       ) : !analytics ? (
-        <div className="text-gray-500 text-center py-4">Выберите класс для просмотра аналитики</div>
+        <div className="text-gray-500 text-center py-4">{t('classAnalytics.selectClassMessage')}</div>
       ) : (
         <>
           {/* Общая статистика */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 mb-6">
             <div className="bg-gradient-to-r from-blue-500 to-purple-600 text-white p-4 rounded-xl">
               <div className="text-2xl font-bold">{analytics.class_info.total_students}</div>
-              <div className="text-blue-100 text-sm">Студентов</div>
+              <div className="text-blue-100 text-sm">{t('classAnalytics.students')}</div>
             </div>
             <div className="bg-gradient-to-r from-green-500 to-teal-600 text-white p-4 rounded-xl">
               <div className="text-2xl font-bold">{analytics.overall_stats.completed_lessons}</div>
-              <div className="text-green-100 text-sm">Пройдено уроков</div>
+              <div className="text-green-100 text-sm">{t('classAnalytics.completedLessons')}</div>
             </div>
             <div className="bg-gradient-to-r from-yellow-500 to-orange-600 text-white p-4 rounded-xl">
               <div className="text-2xl font-bold">{((analytics.overall_stats?.average_percentage) || 0).toFixed(1)}%</div>
-              <div className="text-yellow-100 text-sm">Средний процент</div>
+              <div className="text-yellow-100 text-sm">{t('classAnalytics.averagePercentage')}</div>
             </div>
           </div>
 
           {/* Статистика по урокам */}
-          <h3 className="text-xl font-bold mb-4">Статистика по урокам</h3>
+          <h3 className="text-xl font-bold mb-4">{t('classAnalytics.lessonsStatsTitle')}</h3>
           <div className="space-y-3 max-h-[400px] overflow-y-auto">
             {analytics.lessons_stats && analytics.lessons_stats.length > 0 ? (
               analytics.lessons_stats
@@ -196,8 +198,8 @@ const ClassAnalytics: React.FC = () => {
                   >
                     <div className="flex justify-between items-start mb-2">
                       <div>
-                        <h4 className="font-semibold">{lesson.lesson_title || 'Без названия'}</h4>
-                        <p className="text-sm text-gray-600 dark:text-gray-400">Урок #{lesson.lesson_order || 'N/A'}</p>
+                        <h4 className="font-semibold">{lesson.lesson_title || t('classAnalytics.lessonUnnamed')}</h4>
+                        <p className="text-sm text-gray-600 dark:text-gray-400">{t('classAnalytics.lessonNumber', { num: lesson.lesson_order || 'N/A' })}</p>
                       </div>
                       <div className="text-right">
                         <div className="font-bold">{((lesson.completion_rate || 0)).toFixed(1)}%</div>
@@ -213,13 +215,13 @@ const ClassAnalytics: React.FC = () => {
                       />
                     </div>
                     <div className="flex justify-between text-xs text-gray-600 dark:text-gray-400">
-                      <span>Средний %: {((lesson.average_percentage || 0)).toFixed(1)}%</span>
-                      <span>Попыток: {lesson.total_attempts || 0}</span>
+                      <span>{t('classAnalytics.averagePercentShort')} {((lesson.average_percentage || 0)).toFixed(1)}%</span>
+                      <span>{t('classAnalytics.attempts')}: {lesson.total_attempts || 0}</span>
                     </div>
                   </div>
                 ))
             ) : (
-              <p className="text-gray-500 dark:text-gray-400 text-center py-4">Нет данных по урокам</p>
+              <p className="text-gray-500 dark:text-gray-400 text-center py-4">{t('classAnalytics.noLessonsData')}</p>
             )}
           </div>
         </>

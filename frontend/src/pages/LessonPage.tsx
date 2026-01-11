@@ -6,6 +6,7 @@ import { lessonsContent } from '../data/lessonsContent';
 import { RenderContent } from '../components/LessonContentBlock';
 import GameTest from '../components/GameTest';
 import { Loader2, BookOpen, Target, CheckCircle2, ArrowLeft, Lightbulb, Gamepad2 } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 const LessonPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -13,6 +14,7 @@ const LessonPage: React.FC = () => {
   const [lesson, setLesson] = useState<Lesson | null>(null);
   const [loading, setLoading] = useState(true);
   const [showTest, setShowTest] = useState(false);
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (id) {
@@ -43,7 +45,7 @@ const LessonPage: React.FC = () => {
   }
 
   if (!lesson) {
-    return <div>Урок не найден</div>;
+    return <div>{t('lessonPage.notFound')}</div>;
   }
 
   const content = lessonsContent.find((l) => l.id === lesson.id);
@@ -56,7 +58,7 @@ const LessonPage: React.FC = () => {
           className="mb-4 sm:mb-6 text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-2 text-sm sm:text-base"
         >
           <ArrowLeft className="w-4 h-4" />
-          Назад к урокам
+          {t('lessonPage.backToLessons')}
         </button>
 
         <div className="card mb-4 sm:mb-6">
@@ -70,16 +72,16 @@ const LessonPage: React.FC = () => {
           <div className="card mb-4 sm:mb-6">
             <h2 className="text-xl sm:text-2xl font-bold mb-3 sm:mb-4 flex items-center gap-2">
               <BookOpen className="w-5 h-5 sm:w-6 sm:h-6 text-blue-600" />
-              Теория
+              {t('lessonPage.theory')}
             </h2>
             <div className="space-y-4 sm:space-y-6">
               <div>
-                <h3 className="text-lg sm:text-xl font-semibold mb-2">Введение</h3>
+                <h3 className="text-lg sm:text-xl font-semibold mb-2">{t('lessonPage.introduction')}</h3>
                 <RenderContent content={content.content.introduction} />
               </div>
 
               <div>
-                <h3 className="text-lg sm:text-xl font-semibold mb-2">Правила</h3>
+                <h3 className="text-lg sm:text-xl font-semibold mb-2">{t('lessonPage.rules')}</h3>
                 <div className="space-y-4">
                   {content.content.rules.map((rule, index) => (
                     <div key={index} className="border-l-4 border-blue-500 pl-4">
@@ -90,7 +92,7 @@ const LessonPage: React.FC = () => {
               </div>
 
               <div>
-                <h3 className="text-lg sm:text-xl font-semibold mb-2">Примеры</h3>
+                <h3 className="text-lg sm:text-xl font-semibold mb-2">{t('lessonPage.examples')}</h3>
                 <div className="space-y-2 sm:space-y-3">
                   {content.content.examples.map((example, index) => (
                     <div
@@ -116,7 +118,7 @@ const LessonPage: React.FC = () => {
               <div className="bg-yellow-50 dark:bg-yellow-900/20 border-2 border-yellow-200 dark:border-yellow-800 p-3 sm:p-4 rounded-xl">
                 <h3 className="text-lg sm:text-xl font-semibold mb-2 flex items-center gap-2">
                   <Lightbulb className="w-4 h-4 sm:w-5 sm:h-5 text-yellow-600" />
-                  Практика
+                  {t('lessonPage.practice')}
                 </h3>
                 <RenderContent content={content.content.practice} />
               </div>
@@ -127,22 +129,22 @@ const LessonPage: React.FC = () => {
         <div className="card">
           <h2 className="text-xl sm:text-2xl font-bold mb-3 sm:mb-4 flex items-center gap-2">
             <Gamepad2 className="w-5 h-5 sm:w-6 sm:h-6 text-purple-600" />
-            Тест
+            {t('lessonPage.testTitle')}
           </h2>
           <p className="text-gray-600 dark:text-gray-400 mb-4 sm:mb-6 text-sm sm:text-base">
-            Проверьте свои знания, пройдя тест. Для прохождения нужно набрать минимум 70%.
+            {t('lessonPage.testDescription', { min: 70 })}
           </p>
           {lesson.progress && (
             <div className="mb-4 sm:mb-6 p-3 sm:p-4 bg-blue-50 dark:bg-blue-900/20 rounded-xl">
               <p className="text-gray-700 dark:text-gray-300 mb-2 text-sm sm:text-base">
-                Лучший результат: <span className="font-bold">{((lesson.progress?.best_percentage) || 0).toFixed(1)}%</span>
+                {t('lessonPage.bestResult')} <span className="font-bold">{((lesson.progress?.best_percentage) || 0).toFixed(1)}%</span>
               </p>
               <p className="text-gray-600 dark:text-gray-400 text-xs sm:text-sm flex flex-wrap items-center gap-1">
-                Попыток: {lesson.progress.attempts_count}
+                {t('lessonPage.attemptsLabel')} {lesson.progress.attempts_count}
                 {lesson.progress.is_completed && (
                   <span className="ml-2 text-green-600 dark:text-green-400 font-semibold flex items-center gap-1">
                     <CheckCircle2 className="w-4 h-4" />
-                    Урок пройден
+                    {t('lessonPage.lessonCompleted')}
                   </span>
                 )}
               </p>
@@ -153,7 +155,7 @@ const LessonPage: React.FC = () => {
             className="btn-primary w-full text-base sm:text-xl py-3 sm:py-4 flex items-center justify-center gap-2"
           >
             <Target className="w-4 h-4 sm:w-5 sm:h-5" />
-            Начать тест
+            {t('lessonPage.startTest') }
           </button>
         </div>
 

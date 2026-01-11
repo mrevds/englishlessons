@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useNavigate, Link } from 'react-router-dom';
 import { authAPI } from '../api/auth';
 import ThemeToggle from './ThemeToggle';
@@ -19,6 +20,7 @@ const Register: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showPasswordConfirm, setShowPasswordConfirm] = useState(false);
+  const { t } = useTranslation();
   const navigate = useNavigate();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -36,7 +38,7 @@ const Register: React.FC = () => {
     // Валидация username
     const usernameValidation = validateUsername(formData.username);
     if (!usernameValidation.valid) {
-      setError(usernameValidation.error || 'Неверное имя пользователя');
+      setError(usernameValidation.error || t('register.invalidUsername'));
       return;
     }
 
@@ -44,7 +46,7 @@ const Register: React.FC = () => {
     if (formData.email) {
       const emailValidation = validateEmail(formData.email);
       if (!emailValidation.valid) {
-        setError(emailValidation.error || 'Неверный email');
+        setError(emailValidation.error || t('register.invalidEmail'));
         return;
       }
     }
@@ -52,12 +54,12 @@ const Register: React.FC = () => {
     // Валидация пароля
     const passwordValidation = validatePassword(formData.password);
     if (!passwordValidation.valid) {
-      setError(passwordValidation.error || 'Неверный пароль');
+      setError(passwordValidation.error || t('register.invalidPassword'));
       return;
     }
 
     if (formData.password !== formData.password_confirm) {
-      setError('Пароли не совпадают');
+      setError(t('register.passwordsMismatch'));
       return;
     }
 
@@ -71,7 +73,7 @@ const Register: React.FC = () => {
       await authAPI.register(registerData);
       navigate('/login');
     } catch (err: any) {
-      setError(err.response?.data?.error || 'Ошибка регистрации');
+      setError(err.response?.data?.error || t('register.registrationError'));
     } finally {
       setLoading(false);
     }
@@ -85,10 +87,10 @@ const Register: React.FC = () => {
       <div className="card max-w-md w-full mx-2 sm:mx-0 max-h-[90vh] overflow-y-auto">
         <div className="text-center mb-5 sm:mb-8">
           <h1 className="text-2xl sm:text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-2">
-            Регистрация
+            {t('register.header')}
           </h1>
-          <p className="text-gray-600 dark:text-gray-400 text-sm sm:text-base">Создайте новый аккаунт</p>
-        </div>
+          <p className="text-gray-600 dark:text-gray-400 text-sm sm:text-base">{t('register.title')}</p>
+        </div> 
 
         <form onSubmit={handleSubmit} className="space-y-3 sm:space-y-4">
           {error && (
@@ -98,7 +100,7 @@ const Register: React.FC = () => {
           )}
 
           <div>
-            <label className="block text-gray-700 dark:text-gray-300 font-semibold mb-1.5 sm:mb-2 text-sm sm:text-base">Имя пользователя</label>
+            <label className="block text-gray-700 dark:text-gray-300 font-semibold mb-1.5 sm:mb-2 text-sm sm:text-base">{t('register.username')}</label>
             <input
               type="text"
               name="username"
@@ -111,7 +113,7 @@ const Register: React.FC = () => {
 
           <div className="grid grid-cols-2 gap-2 sm:gap-4">
             <div>
-              <label className="block text-gray-700 dark:text-gray-300 font-semibold mb-1.5 sm:mb-2 text-sm sm:text-base">Имя</label>
+              <label className="block text-gray-700 dark:text-gray-300 font-semibold mb-1.5 sm:mb-2 text-sm sm:text-base">{t('register.firstName')}</label>
               <input
                 type="text"
                 name="first_name"
@@ -121,7 +123,7 @@ const Register: React.FC = () => {
               />
             </div>
             <div>
-              <label className="block text-gray-700 dark:text-gray-300 font-semibold mb-1.5 sm:mb-2 text-sm sm:text-base">Фамилия</label>
+              <label className="block text-gray-700 dark:text-gray-300 font-semibold mb-1.5 sm:mb-2 text-sm sm:text-base">{t('register.lastName')}</label>
               <input
                 type="text"
                 name="last_name"
@@ -133,7 +135,7 @@ const Register: React.FC = () => {
           </div>
 
           <div>
-            <label className="block text-gray-700 dark:text-gray-300 font-semibold mb-1.5 sm:mb-2 text-sm sm:text-base">Email</label>
+            <label className="block text-gray-700 dark:text-gray-300 font-semibold mb-1.5 sm:mb-2 text-sm sm:text-base">{t('register.email')}</label>
             <input
               type="email"
               name="email"
@@ -145,7 +147,7 @@ const Register: React.FC = () => {
 
           <div className="grid grid-cols-2 gap-2 sm:gap-4">
             <div>
-              <label className="block text-gray-700 dark:text-gray-300 font-semibold mb-1.5 sm:mb-2 text-sm sm:text-base">Класс</label>
+              <label className="block text-gray-700 dark:text-gray-300 font-semibold mb-1.5 sm:mb-2 text-sm sm:text-base">{t('register.classLabel')}</label>
               <select
                 name="level"
                 value={formData.level}
@@ -161,7 +163,7 @@ const Register: React.FC = () => {
               </select>
             </div>
             <div>
-              <label className="block text-gray-700 dark:text-gray-300 font-semibold mb-1.5 sm:mb-2 text-sm sm:text-base">Буква</label>
+              <label className="block text-gray-700 dark:text-gray-300 font-semibold mb-1.5 sm:mb-2 text-sm sm:text-base">{t('register.letterLabel')}</label>
               <select
                 name="level_letter"
                 value={formData.level_letter}
@@ -179,7 +181,7 @@ const Register: React.FC = () => {
           </div>
 
           <div>
-            <label className="block text-gray-700 dark:text-gray-300 font-semibold mb-1.5 sm:mb-2 text-sm sm:text-base">Пароль</label>
+            <label className="block text-gray-700 dark:text-gray-300 font-semibold mb-1.5 sm:mb-2 text-sm sm:text-base">{t('register.password')}</label>
             <div className="relative">
               <input
                 type={showPassword ? "text" : "password"}
@@ -193,7 +195,7 @@ const Register: React.FC = () => {
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors"
-                aria-label={showPassword ? "Скрыть пароль" : "Показать пароль"}
+                aria-label={showPassword ? t('register.hidePassword') : t('register.showPassword')}
               >
                 {showPassword ? (
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -210,7 +212,7 @@ const Register: React.FC = () => {
           </div>
 
           <div>
-            <label className="block text-gray-700 dark:text-gray-300 font-semibold mb-1.5 sm:mb-2 text-sm sm:text-base">Подтвердите пароль</label>
+            <label className="block text-gray-700 dark:text-gray-300 font-semibold mb-1.5 sm:mb-2 text-sm sm:text-base">{t('register.confirmPassword')}</label>
             <div className="relative">
               <input
                 type={showPasswordConfirm ? "text" : "password"}
@@ -224,7 +226,7 @@ const Register: React.FC = () => {
                 type="button"
                 onClick={() => setShowPasswordConfirm(!showPasswordConfirm)}
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors"
-                aria-label={showPasswordConfirm ? "Скрыть пароль" : "Показать пароль"}
+                aria-label={showPasswordConfirm ? t('register.hidePassword') : t('register.showPassword')}
               >
                 {showPasswordConfirm ? (
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -245,15 +247,15 @@ const Register: React.FC = () => {
             disabled={loading}
             className="btn-primary w-full disabled:opacity-50 text-sm sm:text-base"
           >
-            {loading ? 'Регистрация...' : 'Зарегистрироваться'}
+            {loading ? t('register.registering') : t('register.register')}
           </button>
         </form>
 
         <div className="mt-4 sm:mt-6 text-center">
           <p className="text-gray-600 dark:text-gray-400 text-sm sm:text-base">
-            Уже есть аккаунт?{' '}
+            {t('register.alreadyHave')} {' '}
             <Link to="/login" className="text-blue-600 dark:text-blue-400 font-semibold hover:underline">
-              Войти
+              {t('register.login')}
             </Link>
           </p>
         </div>

@@ -5,10 +5,12 @@ import { usersAPI } from '../api/users';
 import { lessonsAPI } from '../api/lessons';
 import { formatDateShort } from '../utils/date';
 import { BarChart3, Loader2, ArrowLeft, Gem, Target, Star, Flame, CheckCircle2, Clock, User, Mail, Key, Save, Edit2 } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 const ProfilePage: React.FC = () => {
   const { user, refreshUser } = useAuth();
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [stats, setStats] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -59,9 +61,9 @@ const ProfilePage: React.FC = () => {
       });
       await refreshUser();
       setEditing(false);
-      alert('Профиль успешно обновлен!');
+      alert(t('profile.profileUpdated'));
     } catch (error: any) {
-      alert(error.response?.data?.error || 'Ошибка при обновлении профиля');
+      alert(error.response?.data?.error || t('profile.profileUpdateError'));
     } finally {
       setSaving(false);
     }
@@ -69,11 +71,11 @@ const ProfilePage: React.FC = () => {
 
   const handleChangePassword = async () => {
     if (passwordData.new_password !== passwordData.confirm_password) {
-      alert('Новые пароли не совпадают');
+      alert(t('profile.passwordsMismatch'));
       return;
     }
     if (passwordData.new_password.length < 6) {
-      alert('Пароль должен быть не менее 6 символов');
+      alert(t('profile.passwordTooShort'));
       return;
     }
 
@@ -82,9 +84,9 @@ const ProfilePage: React.FC = () => {
       await usersAPI.changePassword(passwordData.old_password, passwordData.new_password);
       setPasswordData({ old_password: '', new_password: '', confirm_password: '' });
       setChangingPassword(false);
-      alert('Пароль успешно изменен!');
+      alert(t('profile.passwordChanged'));
     } catch (error: any) {
-      alert(error.response?.data?.error || 'Ошибка при смене пароля');
+      alert(error.response?.data?.error || t('profile.passwordChangeError'));
     } finally {
       setSaving(false);
     }
@@ -106,14 +108,14 @@ const ProfilePage: React.FC = () => {
           className="mb-4 sm:mb-6 text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-2 text-sm sm:text-base"
         >
           <ArrowLeft className="w-4 h-4" />
-          Назад к урокам
+          {t('profile.backToLessons')}
         </button>
 
         <div className="card mb-4 sm:mb-6">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-4 sm:mb-6">
             <h1 className="text-xl sm:text-2xl md:text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent flex items-center gap-2 sm:gap-3">
               <User className="w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 text-blue-600" />
-              Мой профиль
+              {t('profile.myProfile')}
             </h1>
             {!editing && (
               <button
@@ -121,7 +123,7 @@ const ProfilePage: React.FC = () => {
                 className="btn-primary flex items-center gap-2 text-sm sm:text-base"
               >
                 <Edit2 className="w-4 h-4" />
-                Редактировать
+                {t('profile.edit')}
               </button>
             )}
           </div>
@@ -129,7 +131,7 @@ const ProfilePage: React.FC = () => {
           {/* Информация о пользователе */}
           <div className="space-y-4 mb-6">
             <div>
-              <label className="block text-sm font-semibold mb-1">Username</label>
+              <label className="block text-sm font-semibold mb-1">{t('profile.username')}</label>
               <input
                 type="text"
                 value={user?.username || ''}
@@ -141,7 +143,7 @@ const ProfilePage: React.FC = () => {
             <div>
               <label className="block text-sm font-semibold mb-1 flex items-center gap-2">
                 <Mail className="w-4 h-4" />
-                Email
+                {t('profile.email')}
               </label>
               {editing ? (
                 <input
@@ -149,12 +151,12 @@ const ProfilePage: React.FC = () => {
                   value={profileData.email}
                   onChange={(e) => setProfileData({ ...profileData, email: e.target.value })}
                   className="input-field"
-                  placeholder="email@example.com"
+                  placeholder={t('profile.placeholderEmail')}
                 />
               ) : (
                 <input
                   type="text"
-                  value={profileData.email || 'Не указан'}
+                  value={profileData.email || t('profile.notSpecified')}
                   disabled
                   className="input-field bg-gray-100 dark:bg-gray-700"
                 />
@@ -163,14 +165,14 @@ const ProfilePage: React.FC = () => {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-semibold mb-1">Класс</label>
+                <label className="block text-sm font-semibold mb-1">{t('profile.classLabel')}</label>
                 {editing ? (
                   <select
                     value={profileData.level || ''}
                     onChange={(e) => setProfileData({ ...profileData, level: e.target.value ? parseInt(e.target.value) : null })}
                     className="input-field"
                   >
-                    <option value="">Не указан</option>
+                    <option value="">{t('profile.notSpecified')}</option>
                     {Array.from({ length: 11 }, (_, i) => i + 1).map((num) => (
                       <option key={num} value={num}>
                         {num}
@@ -180,7 +182,7 @@ const ProfilePage: React.FC = () => {
                 ) : (
                   <input
                     type="text"
-                    value={profileData.level ? `${profileData.level} класс` : 'Не указан'}
+                    value={profileData.level ? `${profileData.level} ${t('profile.classLabel')}` : t('profile.notSpecified')}
                     disabled
                     className="input-field bg-gray-100 dark:bg-gray-700"
                   />
@@ -188,14 +190,14 @@ const ProfilePage: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-semibold mb-1">Буква класса</label>
+                <label className="block text-sm font-semibold mb-1">{t('profile.classLetterLabel')}</label>
                 {editing ? (
                   <select
                     value={profileData.level_letter}
                     onChange={(e) => setProfileData({ ...profileData, level_letter: e.target.value })}
                     className="input-field"
                   >
-                    <option value="">Не указана</option>
+                    <option value="">{t('profile.notSpecifiedFemale')}</option>
                     {['А', 'Б', 'В', 'Г', 'Д', 'Е', 'Ж', 'З'].map((letter) => (
                       <option key={letter} value={letter}>
                         {letter}
@@ -205,7 +207,7 @@ const ProfilePage: React.FC = () => {
                 ) : (
                   <input
                     type="text"
-                    value={profileData.level_letter || 'Не указана'}
+                    value={profileData.level_letter || t('profile.notSpecifiedFemale')}
                     disabled
                     className="input-field bg-gray-100 dark:bg-gray-700"
                   />
@@ -223,12 +225,12 @@ const ProfilePage: React.FC = () => {
                   {saving ? (
                     <>
                       <Loader2 className="w-4 h-4 animate-spin" />
-                      Сохранение...
+                      {t('profile.saving')}
                     </>
                   ) : (
                     <>
                       <Save className="w-4 h-4" />
-                      Сохранить
+                      {t('profile.save')}
                     </>
                   )}
                 </button>
@@ -243,7 +245,7 @@ const ProfilePage: React.FC = () => {
                   }}
                   className="btn-secondary"
                 >
-                  Отмена
+                  {t('profile.cancel')}
                 </button>
               </div>
             )}
@@ -254,14 +256,14 @@ const ProfilePage: React.FC = () => {
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-xl font-bold flex items-center gap-2">
                 <Key className="w-5 h-5" />
-                Смена пароля
+                {t('profile.changePasswordTitle')}
               </h2>
               {!changingPassword && (
                 <button
                   onClick={() => setChangingPassword(true)}
                   className="btn-secondary text-sm"
                 >
-                  Изменить пароль
+                  {t('profile.changePasswordButton')}
                 </button>
               )}
             </div>
@@ -269,7 +271,7 @@ const ProfilePage: React.FC = () => {
             {changingPassword && (
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-semibold mb-1">Текущий пароль</label>
+                  <label className="block text-sm font-semibold mb-1">{t('profile.currentPassword')}</label>
                   <input
                     type="password"
                     value={passwordData.old_password}
@@ -278,7 +280,7 @@ const ProfilePage: React.FC = () => {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-semibold mb-1">Новый пароль</label>
+                  <label className="block text-sm font-semibold mb-1">{t('profile.newPassword')}</label>
                   <input
                     type="password"
                     value={passwordData.new_password}
@@ -287,7 +289,7 @@ const ProfilePage: React.FC = () => {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-semibold mb-1">Подтвердите новый пароль</label>
+                  <label className="block text-sm font-semibold mb-1">{t('profile.confirmNewPassword')}</label>
                   <input
                     type="password"
                     value={passwordData.confirm_password}
@@ -304,12 +306,12 @@ const ProfilePage: React.FC = () => {
                     {saving ? (
                       <>
                         <Loader2 className="w-4 h-4 animate-spin" />
-                        Сохранение...
+                        {t('profile.saving')}
                       </>
                     ) : (
                       <>
                         <Save className="w-4 h-4" />
-                        Сохранить
+                        {t('profile.save')}
                       </>
                     )}
                   </button>
@@ -320,7 +322,7 @@ const ProfilePage: React.FC = () => {
                     }}
                     className="btn-secondary"
                   >
-                    Отмена
+                    {t('profile.cancel')}
                   </button>
                 </div>
               </div>
@@ -333,36 +335,36 @@ const ProfilePage: React.FC = () => {
           <div className="card">
             <h2 className="text-lg sm:text-xl md:text-2xl font-bold mb-3 sm:mb-4 flex items-center gap-2">
               <BarChart3 className="w-5 h-5 sm:w-6 sm:h-6 text-blue-600" />
-              Моя статистика
+              {t('profile.myStats')}
             </h2>
 
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-6 mb-6 sm:mb-8">
               <div className="stat-card bg-gradient-to-br from-blue-500 via-blue-600 to-purple-600">
                 <Gem className="w-8 h-8 text-white" />
                 <div className="text-2xl sm:text-4xl font-bold mb-1">{stats.total_points}</div>
-                <div className="text-blue-100 text-xs sm:text-sm font-medium">Всего баллов</div>
+                <div className="text-blue-100 text-xs sm:text-sm font-medium">{t('profile.totalPoints')}</div>
               </div>
               <div className="stat-card bg-gradient-to-br from-green-500 via-emerald-500 to-teal-600">
                 <Target className="w-8 h-8 text-white" />
                 <div className="text-2xl sm:text-4xl font-bold mb-1">{stats.completed_lessons}</div>
-                <div className="text-green-100 text-xs sm:text-sm font-medium">Пройдено уроков</div>
+                <div className="text-green-100 text-xs sm:text-sm font-medium">{t('profile.completedLessons')}</div>
               </div>
               <div className="stat-card bg-gradient-to-br from-yellow-400 via-orange-500 to-amber-600">
                 <Star className="w-8 h-8 text-white" />
                 <div className="text-2xl sm:text-4xl font-bold mb-1">{((stats.average_percentage) || 0).toFixed(1)}%</div>
-                <div className="text-yellow-100 text-xs sm:text-sm font-medium">Средний процент</div>
+                <div className="text-yellow-100 text-xs sm:text-sm font-medium">{t('profile.averagePercentage')}</div>
               </div>
               <div className="stat-card bg-gradient-to-br from-purple-500 via-pink-500 to-rose-600">
                 <Flame className="w-8 h-8 text-white" />
                 <div className="text-2xl sm:text-4xl font-bold mb-1">{stats.total_attempts}</div>
-                <div className="text-purple-100 text-xs sm:text-sm font-medium">Всего попыток</div>
+                <div className="text-purple-100 text-xs sm:text-sm font-medium">{t('profile.totalAttempts')}</div>
               </div>
             </div>
 
             {/* Детали по урокам */}
             {stats.lessons_detail && stats.lessons_detail.length > 0 && (
               <>
-                <h3 className="text-base sm:text-lg md:text-xl font-bold mb-3 sm:mb-4">Детали по урокам</h3>
+                <h3 className="text-base sm:text-lg md:text-xl font-bold mb-3 sm:mb-4">{t('profile.lessonsDetails')}</h3>
                 <div className="space-y-3 sm:space-y-4">
                   {stats.lessons_detail.map((lesson: any) => (
                     <div
@@ -379,8 +381,8 @@ const ProfilePage: React.FC = () => {
                             {lesson.lesson_order}
                           </div>
                           <div>
-                            <h3 className="text-sm sm:text-lg md:text-xl font-bold text-gray-800 dark:text-gray-100">{lesson.lesson_title || 'Без названия'}</h3>
-                            <p className="text-gray-500 dark:text-gray-400 text-xs sm:text-sm mt-0.5 sm:mt-1">Урок #{lesson.lesson_order || 'N/A'}</p>
+                            <h3 className="text-sm sm:text-lg md:text-xl font-bold text-gray-800 dark:text-gray-100">{lesson.lesson_title || t('profile.lessonUnnamed')}</h3>
+                            <p className="text-gray-500 dark:text-gray-400 text-xs sm:text-sm mt-0.5 sm:mt-1">{t('profile.lessonNumber', { num: lesson.lesson_order || 'N/A' })}</p>
                           </div>
                         </div>
                         {lesson.is_completed ? (
@@ -391,7 +393,7 @@ const ProfilePage: React.FC = () => {
                       </div>
                       <div className="mt-3 sm:mt-4 bg-gray-50 dark:bg-gray-800/50 rounded-lg sm:rounded-xl p-3 sm:p-4">
                         <div className="flex justify-between items-center mb-3">
-                          <span className="text-sm font-semibold text-gray-700 dark:text-gray-300">Лучший результат</span>
+                          <span className="text-sm font-semibold text-gray-700 dark:text-gray-300">{t('profile.bestResult')}</span>
                           <span className={`text-lg font-bold ${
                             (lesson.best_percentage || 0) >= 70
                               ? 'text-green-600 dark:text-green-400'
@@ -415,9 +417,9 @@ const ProfilePage: React.FC = () => {
                           />
                         </div>
                         <div className="flex justify-between text-xs text-gray-500 dark:text-gray-400">
-                          <span>Попыток: {lesson.attempts || 0}</span>
+                          <span>{t('profile.attemptsLabel')} {lesson.attempts || 0}</span>
                           {lesson.completed_at && (
-                            <span>Пройден: {formatDateShort(lesson.completed_at)}</span>
+                            <span>{t('profile.lessonCompletedLabel')} {formatDateShort(lesson.completed_at)}</span>
                           )}
                         </div>
                       </div>

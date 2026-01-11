@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { analyticsAPI } from '../api/users';
 import { Loader2, TrendingUp, Calendar } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import {
   ResponsiveContainer,
   BarChart,
@@ -16,6 +17,8 @@ const ClassActivityChart: React.FC = () => {
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [days, setDays] = useState(30);
+  const { t, i18n } = useTranslation();
+  const locale = i18n.language === 'uz-latn' ? 'uz-Latn-UZ' : 'ru-RU';
 
   useEffect(() => {
     loadData();
@@ -46,10 +49,10 @@ const ClassActivityChart: React.FC = () => {
       <div className="card">
         <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
           <TrendingUp className="w-6 h-6 text-blue-600" />
-          Активность классов
+          {t('classActivity.title')}
         </h2>
         <p className="text-gray-500 dark:text-gray-400 text-center py-8">
-          Нет данных за выбранный период
+          {t('classActivity.noData')}
         </p>
       </div>
     );
@@ -72,7 +75,7 @@ const ClassActivityChart: React.FC = () => {
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 sm:gap-0 mb-4 sm:mb-6">
         <h2 className="text-lg sm:text-2xl font-bold flex items-center gap-2">
           <TrendingUp className="w-5 h-5 sm:w-6 sm:h-6 text-blue-600" />
-          Активность классов
+          {t('classActivity.title')}
         </h2>
         <div className="flex items-center gap-2">
           <Calendar className="w-4 h-4 sm:w-5 sm:h-5 text-gray-500" />
@@ -81,11 +84,11 @@ const ClassActivityChart: React.FC = () => {
             onChange={(e) => setDays(parseInt(e.target.value))}
             className="input-field text-xs sm:text-sm py-2 px-3"
           >
-            <option value="7">7 дней</option>
-            <option value="14">14 дней</option>
-            <option value="30">30 дней</option>
-            <option value="60">60 дней</option>
-            <option value="90">90 дней</option>
+            <option value="7">{t('classActivity.days.7')}</option>
+            <option value="14">{t('classActivity.days.14')}</option>
+            <option value="30">{t('classActivity.days.30')}</option>
+            <option value="60">{t('classActivity.days.60')}</option>
+            <option value="90">{t('classActivity.days.90')}</option> 
           </select>
         </div>
       </div>
@@ -117,7 +120,7 @@ const ClassActivityChart: React.FC = () => {
       </div>
 
       <div className="mt-4 text-sm text-gray-500 dark:text-gray-400">
-        Период: {new Date(data.period.start_date).toLocaleDateString('ru-RU')} - {new Date(data.period.end_date).toLocaleDateString('ru-RU')}
+        {t('classActivity.period')} {new Date(data.period.start_date).toLocaleDateString(locale)} - {new Date(data.period.end_date).toLocaleDateString(locale)}
       </div>
     </div>
   );

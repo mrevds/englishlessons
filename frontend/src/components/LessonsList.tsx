@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { lessonsAPI } from '../api/lessons';
 import type { Lesson } from '../api/lessons';
@@ -10,6 +11,7 @@ const LessonsList: React.FC = () => {
   const [lessons, setLessons] = useState<Lesson[]>([]);
   const [loading, setLoading] = useState(true);
   const { user, logout } = useAuth();
+  const { t } = useTranslation();
   const navigate = useNavigate();
 
   // Кеш для уроков
@@ -59,11 +61,11 @@ const LessonsList: React.FC = () => {
               </div>
               <div>
                 <h1 className="text-2xl sm:text-4xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
-                  English Lessons
+                  {t('nav.siteTitle')}
                 </h1>
                 <p className="text-gray-600 dark:text-gray-400 mt-1 text-sm sm:text-base flex items-center gap-2">
                   <HandHeart className="w-5 h-5 text-pink-500" />
-                  <span>Добро пожаловать, <span className="font-semibold text-blue-600 dark:text-blue-400">{user?.first_name || user?.username}</span>!</span>
+                  <span>{t('lessons.welcome', { name: user?.first_name || user?.username })}</span>
                 </p>
               </div>
             </div>
@@ -75,8 +77,8 @@ const LessonsList: React.FC = () => {
                 className="btn-primary text-sm sm:text-base flex items-center gap-2"
               >
                 <BarChart3 className="w-4 h-4" />
-                Дашборд
-              </button>
+                {t('nav.dashboard')}
+              </button> 
             ) : (
               <>
                 <button
@@ -84,35 +86,35 @@ const LessonsList: React.FC = () => {
                   className="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-4 sm:px-6 py-2 rounded-lg hover:from-purple-700 hover:to-pink-700 flex items-center gap-2 font-semibold shadow-lg text-sm sm:text-base"
                 >
                   <Gamepad2 className="w-4 h-4" />
-                  🎮 ИГРЫ
+                  {t('lessons.games')}
                 </button>
                 <button
                   onClick={() => navigate('/profile')}
                   className="btn-primary text-sm sm:text-base flex items-center gap-2"
                 >
                   <User className="w-4 h-4" />
-                  Профиль
+                  {t('nav.profile')}
                 </button>
                 <button
                   onClick={() => navigate('/stats')}
                   className="btn-secondary text-sm sm:text-base flex items-center gap-2"
                 >
                   <BarChart3 className="w-4 h-4" />
-                  Статистика
+                  {t('lessons.stats')}
                 </button>
                 <button
                   onClick={() => navigate('/leaderboard')}
                   className="btn-secondary text-sm sm:text-base flex items-center gap-2"
                 >
                   <Trophy className="w-4 h-4" />
-                  Рейтинг
+                  {t('nav.leaderboard')}
                 </button>
               </>
-            )}
+            )} 
             <ThemeToggle />
             <button onClick={logout} className="btn-secondary text-sm sm:text-base">
-              Выйти
-            </button>
+              {t('nav.logout')}
+            </button> 
           </div>
         </div>
 
@@ -172,7 +174,7 @@ const LessonsList: React.FC = () => {
                   {lesson.progress && (
                     <div className="mb-4 bg-gray-50 dark:bg-gray-700/50 rounded-xl p-3">
                       <div className="flex justify-between text-sm font-semibold mb-2">
-                        <span className="text-gray-700 dark:text-gray-300">Прогресс</span>
+                        <span className="text-gray-700 dark:text-gray-300">{t('lessons.progress')}</span>
                         <span className={`font-bold ${
                           lesson.progress.best_percentage >= 70 
                             ? 'text-green-600 dark:text-green-400' 
@@ -197,15 +199,15 @@ const LessonsList: React.FC = () => {
                       </div>
                       <div className="flex justify-between items-center mt-2">
                         <p className="text-xs text-gray-500 dark:text-gray-400">
-                          Попыток: <span className="font-semibold">{lesson.progress.attempts_count}</span>
+                          {t('lessons.attempts')} <span className="font-semibold">{lesson.progress.attempts_count}</span>
                         </p>
                         {lesson.progress.is_completed && (
                           <span className="text-xs bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 px-2 py-1 rounded-full font-semibold flex items-center gap-1">
                             <CheckCircle2 className="w-3 h-3" />
-                            Пройдено
+                            {t('lessons.completed')}
                           </span>
                         )}
-                      </div>
+                      </div> 
                     </div>
                   )}
 
@@ -223,17 +225,17 @@ const LessonsList: React.FC = () => {
                       {!isAccessible ? (
                         <>
                           <Lock className="w-4 h-4" />
-                          Урок заблокирован
+                          {t('lessons.lockedLesson')}
                         </>
                       ) : isCompleted ? (
                         <>
                           <RotateCcw className="w-4 h-4" />
-                          Повторить урок
+                          {t('lessons.repeatLesson')}
                         </>
                       ) : (
                         <>
                           <Rocket className="w-4 h-4" />
-                          Начать урок
+                          {t('lessons.startLesson')}
                         </>
                       )}
                     </span>

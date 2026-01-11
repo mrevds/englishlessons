@@ -5,11 +5,13 @@ import Leaderboard from '../components/Leaderboard';
 import Achievements from '../components/Achievements';
 import { formatDateShort } from '../utils/date';
 import { BarChart3, Loader2, ArrowLeft, Gem, Target, Star, Flame, CheckCircle2, Clock, Sparkles } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 const StatsPage: React.FC = () => {
   const [stats, setStats] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   useEffect(() => {
     loadStats();
@@ -35,7 +37,7 @@ const StatsPage: React.FC = () => {
   }
 
   if (!stats) {
-    return <div>Нет данных</div>;
+    return <div>{t('stats.noData')}</div>;
   }
 
   return (
@@ -46,13 +48,13 @@ const StatsPage: React.FC = () => {
           className="mb-4 sm:mb-6 text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-2 text-sm sm:text-base"
         >
           <ArrowLeft className="w-4 h-4" />
-          Назад к урокам
+          {t('stats.backToLessons')}
         </button>
 
         <div className="card mb-4 sm:mb-6">
           <h1 className="text-2xl sm:text-4xl font-bold mb-4 sm:mb-6 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent flex items-center gap-3">
             <BarChart3 className="w-8 h-8 sm:w-10 sm:h-10 text-blue-600" />
-            Моя статистика
+            {t('stats.myStats')}
           </h1>
 
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-6 mb-6 sm:mb-8">
@@ -62,7 +64,7 @@ const StatsPage: React.FC = () => {
                 <div className="text-2xl opacity-50">+</div>
               </div>
               <div className="text-2xl sm:text-4xl font-bold mb-1">{stats.total_points}</div>
-              <div className="text-blue-100 text-xs sm:text-sm font-medium">Всего баллов</div>
+              <div className="text-blue-100 text-xs sm:text-sm font-medium">{t('stats.totalPoints')}</div>
             </div>
             <div className="stat-card bg-gradient-to-br from-green-500 via-emerald-500 to-teal-600 hover:from-green-600 hover:via-emerald-600 hover:to-teal-700">
               <div className="flex items-center justify-between mb-2">
@@ -70,7 +72,7 @@ const StatsPage: React.FC = () => {
                 <CheckCircle2 className="w-6 h-6 text-white opacity-50" />
               </div>
               <div className="text-2xl sm:text-4xl font-bold mb-1">{stats.completed_lessons}</div>
-              <div className="text-green-100 text-xs sm:text-sm font-medium">Пройдено уроков</div>
+              <div className="text-green-100 text-xs sm:text-sm font-medium">{t('stats.completedLessons')}</div>
             </div>
             <div className="stat-card bg-gradient-to-br from-yellow-400 via-orange-500 to-amber-600 hover:from-yellow-500 hover:via-orange-600 hover:to-amber-700">
               <div className="flex items-center justify-between mb-2">
@@ -78,7 +80,7 @@ const StatsPage: React.FC = () => {
                 <div className="text-2xl opacity-50">%</div>
               </div>
               <div className="text-2xl sm:text-4xl font-bold mb-1">{((stats.average_percentage) || 0).toFixed(1)}%</div>
-              <div className="text-yellow-100 text-xs sm:text-sm font-medium">Средний процент</div>
+              <div className="text-yellow-100 text-xs sm:text-sm font-medium">{t('stats.averagePercentage')}</div>
             </div>
             <div className="stat-card bg-gradient-to-br from-purple-500 via-pink-500 to-rose-600 hover:from-purple-600 hover:via-pink-600 hover:to-rose-700">
               <div className="flex items-center justify-between mb-2">
@@ -86,7 +88,7 @@ const StatsPage: React.FC = () => {
                 <div className="text-2xl opacity-50">↻</div>
               </div>
               <div className="text-2xl sm:text-4xl font-bold mb-1">{stats.total_attempts}</div>
-              <div className="text-purple-100 text-xs sm:text-sm font-medium">Всего попыток</div>
+              <div className="text-purple-100 text-xs sm:text-sm font-medium">{t('stats.totalAttempts')}</div>
             </div>
           </div>
 
@@ -95,14 +97,14 @@ const StatsPage: React.FC = () => {
             <div className="mb-6 sm:mb-8 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-gray-800 dark:to-gray-700 rounded-2xl p-4 sm:p-6 border-2 border-blue-100 dark:border-gray-600">
               <div className="flex justify-between items-center mb-3 sm:mb-4">
                 <div>
-                  <h3 className="text-lg sm:text-xl font-bold text-gray-800 dark:text-gray-100 mb-0.5 sm:mb-1">Общий прогресс</h3>
-                  <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">Ваш путь к мастерству</p>
+                  <h3 className="text-lg sm:text-xl font-bold text-gray-800 dark:text-gray-100 mb-0.5 sm:mb-1">{t('stats.overallProgress')}</h3>
+                  <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">{t('stats.yourJourney')}</p>
                 </div>
                 <div className="text-right">
                   <div className="text-xl sm:text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
                     {stats.completed_lessons}/{stats.total_lessons}
                   </div>
-                  <p className="text-[10px] sm:text-xs text-gray-500 dark:text-gray-400">уроков</p>
+                  <p className="text-[10px] sm:text-xs text-gray-500 dark:text-gray-400">{t('stats.lessonsWord')}</p>
                 </div>
               </div>
               <div className="relative">
@@ -116,7 +118,7 @@ const StatsPage: React.FC = () => {
                 </div>
                 <div className="flex justify-between items-center mt-3">
                   <p className="text-sm font-semibold text-gray-700 dark:text-gray-300">
-                    Пройдено <span className="text-green-600 dark:text-green-400">{stats.overall_progress?.toFixed(1) || 0}%</span>
+                    {t('stats.progressCompleted')} <span className="text-green-600 dark:text-green-400">{stats.overall_progress?.toFixed(1) || 0}%</span>
                   </p>
                   {stats.overall_progress >= 100 && (
                     <Sparkles className="w-6 h-6 text-yellow-500 animate-float" />
@@ -126,7 +128,7 @@ const StatsPage: React.FC = () => {
             </div>
           )}
 
-          <h2 className="text-xl sm:text-2xl font-bold mb-3 sm:mb-4">Детали по урокам</h2>
+          <h2 className="text-xl sm:text-2xl font-bold mb-3 sm:mb-4">{t('stats.lessonsDetails')}</h2>
           <div className="space-y-3 sm:space-y-4">
             {stats.lessons_detail.map((lesson: any, index: number) => (
               <div
@@ -144,25 +146,25 @@ const StatsPage: React.FC = () => {
                       {lesson.lesson_order}
                     </div>
                     <div className="min-w-0">
-                      <h3 className="text-base sm:text-xl font-bold text-gray-800 dark:text-gray-100 truncate">{lesson.lesson_title || 'Без названия'}</h3>
-                      <p className="text-gray-500 dark:text-gray-400 text-xs sm:text-sm mt-0.5 sm:mt-1">Урок #{lesson.lesson_order || 'N/A'}</p>
+                      <h3 className="text-base sm:text-xl font-bold text-gray-800 dark:text-gray-100 truncate">{lesson.lesson_title || t('stats.lessonUnnamed')}</h3>
+                      <p className="text-gray-500 dark:text-gray-400 text-xs sm:text-sm mt-0.5 sm:mt-1">{t('stats.lessonNumber', { num: lesson.lesson_order || 'N/A' })}</p>
                     </div>
                   </div>
                   {lesson.is_completed ? (
                     <div className="flex flex-col items-center flex-shrink-0">
                       <CheckCircle2 className="w-6 h-6 sm:w-8 sm:h-8 text-green-500" />
-                      <span className="text-[10px] sm:text-xs text-green-600 dark:text-green-400 font-semibold mt-0.5 sm:mt-1">Пройден</span>
+                      <span className="text-[10px] sm:text-xs text-green-600 dark:text-green-400 font-semibold mt-0.5 sm:mt-1">{t('stats.lessonCompleted')}</span>
                     </div>
                   ) : (
                     <div className="flex flex-col items-center flex-shrink-0">
                       <Clock className="w-5 h-5 sm:w-7 sm:h-7 text-gray-400" />
-                      <span className="text-[10px] sm:text-xs text-gray-500 dark:text-gray-400 mt-0.5 sm:mt-1">В процессе</span>
+                      <span className="text-[10px] sm:text-xs text-gray-500 dark:text-gray-400 mt-0.5 sm:mt-1">{t('stats.inProgress')}</span>
                     </div>
                   )}
                 </div>
                 <div className="mt-3 sm:mt-4 bg-gray-50 dark:bg-gray-800/50 rounded-xl p-3 sm:p-4">
                   <div className="flex justify-between items-center mb-3">
-                    <span className="text-sm font-semibold text-gray-700 dark:text-gray-300">Лучший результат</span>
+                    <span className="text-sm font-semibold text-gray-700 dark:text-gray-300">{t('stats.bestResult')}</span>
                     <span className={`text-lg font-bold ${
                       lesson.best_percentage >= 70
                         ? 'text-green-600 dark:text-green-400'
@@ -189,7 +191,7 @@ const StatsPage: React.FC = () => {
                   </div>
                   <div className="flex justify-between items-center text-xs">
                     <div className="flex items-center gap-2">
-                      <span className="text-gray-600 dark:text-gray-400">Попыток:</span>
+                      <span className="text-gray-600 dark:text-gray-400">{t('stats.attemptsLabel')}</span>
                       <span className="font-bold text-gray-800 dark:text-gray-200">{lesson.attempts}</span>
                     </div>
                     {lesson.completed_at && (

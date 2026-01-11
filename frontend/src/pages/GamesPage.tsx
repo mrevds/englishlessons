@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import Layout from '../components/Layout';
 import { Gamepad2, Target, Puzzle, Brain, Zap, Trophy } from 'lucide-react';
@@ -42,6 +43,7 @@ const games = [
 ];
 
 const GamesPage: React.FC = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [selectedLevel, setSelectedLevel] = useState<number>(0);
 
@@ -67,18 +69,18 @@ const GamesPage: React.FC = () => {
           <div className="flex items-center justify-center gap-2 sm:gap-3 mb-3 sm:mb-4">
             <Gamepad2 className="w-8 h-8 sm:w-10 sm:h-10 text-blue-600" />
             <h1 className="text-2xl sm:text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-              Игры
+              {t('games.title')}
             </h1>
           </div>
           <p className="text-gray-600 dark:text-gray-400 text-sm sm:text-lg">
-            Выбери уровень сложности и игру для практики
+            {t('games.subtitle')}
           </p>
         </div>
 
         {/* Level Selector */}
         <div className="mb-6 sm:mb-8 card p-4 sm:p-6">
           <label className="block text-gray-700 dark:text-gray-300 font-semibold mb-2 sm:mb-3 text-sm sm:text-lg">
-            Выбери уровень сложности:
+            {t('games.selectLabel')}
           </label>
           <select
             value={selectedLevel}
@@ -111,10 +113,10 @@ const GamesPage: React.FC = () => {
                   <Icon className="w-5 h-5 sm:w-8 sm:h-8 text-white" />
                 </div>
                 <h3 className="text-xs sm:text-lg font-bold text-gray-900 dark:text-white mb-1 sm:mb-2 text-center leading-tight">
-                  {game.title}
+                  {t(`games.list.${game.id}.title`, { defaultValue: game.title })}
                 </h3>
                 <p className="text-xs text-gray-600 dark:text-gray-400 text-center hidden sm:block">
-                  {game.description}
+                  {t(`games.list.${game.id}.description`, { defaultValue: game.description })}
                 </p>
               </button>
             );
@@ -124,10 +126,10 @@ const GamesPage: React.FC = () => {
         {/* Stats placeholder */}
         <div className="mt-8 sm:mt-12 card p-4 sm:p-6 text-center">
           <h2 className="text-lg sm:text-2xl font-bold text-gray-900 dark:text-white mb-2">
-            🏆 Твои достижения
+            🏆 {t('games.statsTitle')}
           </h2>
           <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400">
-            Статистика по играм скоро появится!
+            {t('games.statsDesc')}
           </p>
         </div>
       </div>

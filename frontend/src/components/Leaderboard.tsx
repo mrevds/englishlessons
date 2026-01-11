@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { leaderboardAPI } from '../api/leaderboard';
 import type { LeaderboardEntry } from '../api/leaderboard';
 import { useAuth } from '../context/AuthContext';
@@ -6,6 +7,7 @@ import { Trophy, Medal, Loader2 } from 'lucide-react';
 
 const Leaderboard: React.FC = () => {
   const { user } = useAuth();
+  const { t } = useTranslation();
   const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([]);
   const [loading, setLoading] = useState(true);
   const [myRank, setMyRank] = useState<number | null>(null);
@@ -67,20 +69,20 @@ const Leaderboard: React.FC = () => {
     <div className="card">
       <h2 className="text-xl sm:text-2xl font-bold mb-3 sm:mb-4 flex items-center gap-2">
         <Trophy className="w-5 h-5 sm:w-6 sm:h-6 text-yellow-500" />
-        Рейтинг класса
+        {t('leaderboard.title')}
       </h2>
       
       {myRank && (
         <div className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white p-3 sm:p-4 rounded-xl mb-3 sm:mb-4">
           <div className="text-base sm:text-lg font-semibold flex items-center gap-2">
-            Ваше место: {getRankIcon(myRank)}
+            {t('leaderboard.yourRank')} {getRankIcon(myRank)}
           </div>
         </div>
-      )}
+      )} 
 
       <div className="space-y-2 max-h-[400px] sm:max-h-[500px] overflow-y-auto">
         {leaderboard.length === 0 ? (
-          <p className="text-gray-500 dark:text-gray-400 text-center py-4">Нет данных</p>
+          <p className="text-gray-500 dark:text-gray-400 text-center py-4">{t('leaderboard.noData')}</p>
         ) : (
           leaderboard.map((entry, index) => {
             const isMe = entry.user_id === user?.id;
@@ -103,7 +105,7 @@ const Leaderboard: React.FC = () => {
                     <div className="min-w-0">
                       <div className={`font-semibold text-sm sm:text-base truncate ${isMe ? 'text-white' : 'text-gray-800 dark:text-gray-200'}`}>
                         {entry.full_name || entry.username}
-                        {isMe && <span className="ml-1 sm:ml-2 text-yellow-300">(Вы)</span>}
+                        {isMe && <span className="ml-1 sm:ml-2 text-yellow-300">{t('leaderboard.you')}</span>}
                       </div>
                       <div className={`text-xs sm:text-sm ${isMe ? 'text-blue-100' : 'text-gray-600 dark:text-gray-400'}`}>
                         {entry.class_display}
@@ -112,10 +114,10 @@ const Leaderboard: React.FC = () => {
                   </div>
                   <div className="text-right flex-shrink-0">
                     <div className={`text-base sm:text-xl font-bold ${isMe ? 'text-white' : 'text-gray-800 dark:text-gray-200'}`}>
-                      {entry.total_points} <span className="hidden sm:inline">баллов</span><span className="sm:hidden">б.</span>
+                      {entry.total_points} <span className="hidden sm:inline">{t('leaderboard.points')}</span><span className="sm:hidden">{t('leaderboard.pointsShort')}</span>
                     </div>
                     <div className={`text-xs sm:text-sm ${isMe ? 'text-blue-100' : 'text-gray-600 dark:text-gray-400'}`}>
-                      {entry.completed_lessons} ур. • {(entry.average_percentage || 0).toFixed(0)}%
+                      {entry.completed_lessons} {t('leaderboard.lessonsAbbr')} • {(entry.average_percentage || 0).toFixed(0)}%
                     </div>
                   </div>
                 </div>

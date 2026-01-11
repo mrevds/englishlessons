@@ -10,10 +10,12 @@ import ClassActivityChart from '../components/ClassActivityChart';
 import ThemeToggle from '../components/ThemeToggle';
 import { formatDateShort } from '../utils/date';
 import { BarChart3, BookOpen, Loader2, CheckCircle2, Clock, Key, X, Gamepad2, Timer, Users } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 const TeacherDashboard: React.FC = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [students, setStudents] = useState<Student[]>([]);
   const [selectedStudent, setSelectedStudent] = useState<Student | null>(null);
   const [studentStats, setStudentStats] = useState<StudentStats | null>(null);
@@ -128,7 +130,7 @@ const TeacherDashboard: React.FC = () => {
       const result = await usersAPI.resetStudentPassword(resetUsername.trim());
       setResetResult(result);
     } catch (error: any) {
-      alert(error.response?.data?.error || 'Ошибка при сбросе пароля');
+      alert(error.response?.data?.error || t('teacherDashboard.resetPasswordError'));
     } finally {
       setResetLoading(false);
     }
@@ -154,10 +156,10 @@ const TeacherDashboard: React.FC = () => {
           <div>
             <h1 className="text-xl sm:text-2xl md:text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent flex items-center gap-2 sm:gap-3">
               <BarChart3 className="w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 text-blue-600" />
-              Дашборд учителя
+              {t('teacherDashboard.title')}
             </h1>
             <p className="text-gray-600 dark:text-gray-400 mt-1 sm:mt-2 text-xs sm:text-sm md:text-base">
-              Добро пожаловать, {user?.first_name || user?.username}!
+              {t('teacherDashboard.welcome', { name: user?.first_name || user?.username })}
             </p>
           </div>
           <div className="flex flex-wrap gap-2 items-center w-full sm:w-auto">
@@ -166,18 +168,18 @@ const TeacherDashboard: React.FC = () => {
               className="btn-primary text-xs sm:text-sm py-2 px-3 sm:py-3 sm:px-4 flex items-center gap-1 sm:gap-2"
             >
               <Key className="w-3 h-3 sm:w-4 sm:h-4" />
-              <span className="hidden xs:inline">Сбросить</span> пароль
+              <span className="hidden xs:inline">{t('teacherDashboard.resetShort')}</span> {t('teacherDashboard.password')}
             </button>
             <button
               onClick={() => navigate('/lessons')}
               className="btn-secondary text-xs sm:text-sm py-2 px-3 sm:py-3 sm:px-4 flex items-center gap-1 sm:gap-2"
             >
               <BookOpen className="w-3 h-3 sm:w-4 sm:h-4" />
-              Уроки
+              {t('teacherDashboard.lessons')}
             </button>
             <ThemeToggle />
             <button onClick={logout} className="btn-secondary text-xs sm:text-sm py-2 px-3 sm:py-3 sm:px-4">
-              Выйти
+              {t('nav.logout')}
             </button>
           </div>
         </div>
@@ -198,7 +200,7 @@ const TeacherDashboard: React.FC = () => {
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4">
               <h2 className="text-xl sm:text-2xl font-bold flex items-center gap-2">
                 <Gamepad2 className="w-6 h-6 text-purple-600" />
-                Статистика по играм
+                {t('teacherDashboard.gamesStats')}
               </h2>
               
               {/* Фильтры для игр */}
@@ -208,9 +210,9 @@ const TeacherDashboard: React.FC = () => {
                   onChange={(e) => setGameFilters({ ...gameFilters, level: e.target.value })}
                   className="input-field text-sm py-1 px-2 w-24"
                 >
-                  <option value="">Класс</option>
+                  <option value="">{t('teacherDashboard.classLabel')}</option>
                   {Array.from({ length: 11 }, (_, i) => i + 1).map((num) => (
-                    <option key={num} value={num}>{num} класс</option>
+                    <option key={num} value={num}>{num} {t('teacherDashboard.classLabel')}</option>
                   ))}
                 </select>
                 <select
@@ -218,7 +220,7 @@ const TeacherDashboard: React.FC = () => {
                   onChange={(e) => setGameFilters({ ...gameFilters, level_letter: e.target.value })}
                   className="input-field text-sm py-1 px-2 w-20"
                 >
-                  <option value="">Буква</option>
+                  <option value="">{t('teacherDashboard.letter')}</option>
                   {['А', 'Б', 'В', 'Г', 'Д', 'Е', 'Ж', 'З'].map((letter) => (
                     <option key={letter} value={letter}>{letter}</option>
                   ))}
@@ -228,7 +230,7 @@ const TeacherDashboard: React.FC = () => {
                   onChange={(e) => setGameFilters({ ...gameFilters, game_type: e.target.value })}
                   className="input-field text-sm py-1 px-2 w-36"
                 >
-                  <option value="">Все игры</option>
+                  <option value="">{t('teacherDashboard.allGames')}</option>
                   {Object.entries(gameNames).map(([key, name]) => (
                     <option key={key} value={key}>{name}</option>
                   ))}
@@ -247,7 +249,7 @@ const TeacherDashboard: React.FC = () => {
                 }`}
               >
                 <Users className="w-4 h-4" />
-                Топ студентов
+                {t('teacherDashboard.topStudents')}
               </button>
               <button
                 onClick={() => setGamesTab('recent')}
@@ -258,7 +260,7 @@ const TeacherDashboard: React.FC = () => {
                 }`}
               >
                 <Timer className="w-4 h-4" />
-                Последние игры
+                {t('teacherDashboard.recentGames')}
               </button>
             </div>
 
@@ -273,13 +275,13 @@ const TeacherDashboard: React.FC = () => {
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-4">
                   <div className="bg-purple-100 dark:bg-purple-900/30 p-3 rounded-xl text-center">
                     <div className="text-2xl font-bold text-purple-600">{(classGameStats || []).length}</div>
-                    <div className="text-xs text-gray-600 dark:text-gray-400">Активных игроков</div>
+                    <div className="text-xs text-gray-600 dark:text-gray-400">{t('teacherDashboard.activePlayers')}</div>
                   </div>
                   <div className="bg-blue-100 dark:bg-blue-900/30 p-3 rounded-xl text-center">
                     <div className="text-2xl font-bold text-blue-600">
                       {(classGameStats || []).reduce((sum, s) => sum + s.total_games, 0)}
                     </div>
-                    <div className="text-xs text-gray-600 dark:text-gray-400">Всего игр</div>
+                    <div className="text-xs text-gray-600 dark:text-gray-400">{t('teacherDashboard.totalGames')}</div>
                   </div>
                   <div className="bg-green-100 dark:bg-green-900/30 p-3 rounded-xl text-center">
                     <div className="text-2xl font-bold text-green-600">
@@ -287,18 +289,18 @@ const TeacherDashboard: React.FC = () => {
                         ? Math.round((classGameStats || []).reduce((sum, s) => sum + s.avg_percentage, 0) / (classGameStats || []).length)
                         : 0}%
                     </div>
-                    <div className="text-xs text-gray-600 dark:text-gray-400">Средний балл</div>
+                    <div className="text-xs text-gray-600 dark:text-gray-400">{t('teacherDashboard.avgScore')}</div>
                   </div>
                   <div className="bg-orange-100 dark:bg-orange-900/30 p-3 rounded-xl text-center">
                     <div className="text-2xl font-bold text-orange-600">
-                      {Math.floor((classGameStats || []).reduce((sum, s) => sum + s.total_time, 0) / 60)}м
+                      {Math.floor((classGameStats || []).reduce((sum, s) => sum + s.total_time, 0) / 60)}{t('teacherDashboard.minutesShort')}
                     </div>
-                    <div className="text-xs text-gray-600 dark:text-gray-400">Общее время</div>
+                    <div className="text-xs text-gray-600 dark:text-gray-400">{t('teacherDashboard.totalTime')}</div>
                   </div>
                 </div>
 
                 {(!classGameStats || classGameStats.length === 0) ? (
-                  <p className="text-gray-500 text-center py-4">Нет данных по играм</p>
+                  <p className="text-gray-500 text-center py-4">{t('teacherDashboard.noGameData')}</p>
                   ) : (
                     <div className="space-y-2 max-h-[500px] overflow-y-auto">
                       {(classGameStats || []).map((stat, idx) => (
@@ -317,12 +319,12 @@ const TeacherDashboard: React.FC = () => {
                           <div className="flex-1">
                             <div className="font-semibold text-sm">{stat.full_name || stat.username}</div>
                             <div className="text-xs text-gray-600 dark:text-gray-400">
-                              {stat.total_games} игр • {Math.round(stat.avg_percentage)}% • {Math.floor(stat.total_time / 60)}м
+                              {stat.total_games} {t('teacherDashboard.gamesShort')} • {Math.round(stat.avg_percentage)}% • {Math.floor(stat.total_time / 60)}{t('teacherDashboard.minutesShort')}
                             </div>
                           </div>
                           <div className="text-right">
                             <div className="text-lg font-bold text-purple-600">{stat.best_score}</div>
-                            <div className="text-xs text-gray-500">лучший</div>
+                            <div className="text-xs text-gray-500">{t('teacherDashboard.best')}</div>
                           </div>
                         </div>
                       ))}
@@ -333,7 +335,7 @@ const TeacherDashboard: React.FC = () => {
               /* Последние игры */
               <div>
                 {recentGames.length === 0 ? (
-                  <p className="text-gray-500 text-center py-4">Нет недавних игр</p>
+                  <p className="text-gray-500 text-center py-4">{t('teacherDashboard.noRecentGames')}</p>
                 ) : (
                   <div className="space-y-2 max-h-[500px] overflow-y-auto">
                     {recentGames.map((game) => (
@@ -350,15 +352,15 @@ const TeacherDashboard: React.FC = () => {
                         </div>
                         <div className="flex-1 min-w-0">
                           <div className="font-semibold text-sm truncate">
-                            {game.user ? `${game.user.first_name} ${game.user.last_name}`.trim() || game.user.username : 'Студент'}
+                            {game.user ? `${game.user.first_name} ${game.user.last_name}`.trim() || game.user.username : t('teacherDashboard.student')}
                           </div>
                           <div className="text-xs text-gray-600 dark:text-gray-400">
-                            {gameNames[game.game_type] || game.game_type} • Ур. {game.level}
+                            {gameNames[game.game_type] || game.game_type} • {t('teacherDashboard.levelShort')} {game.level}
                           </div>
                         </div>
                         <div className="text-right text-sm">
                           <div className="text-gray-700 dark:text-gray-300">{game.correct_count}/{game.total_count}</div>
-                          <div className="text-xs text-gray-500">{game.time_spent}с</div>
+                          <div className="text-xs text-gray-500">{game.time_spent}{t('teacherDashboard.secondsShort')}</div>
                         </div>
                       </div>
                     ))}
@@ -373,20 +375,20 @@ const TeacherDashboard: React.FC = () => {
           {/* Список студентов */}
           <div className="lg:col-span-1">
             <div className="card">
-              <h2 className="text-2xl font-bold mb-4">👥 Студенты</h2>
+              <h2 className="text-2xl font-bold mb-4">👥 {t('teacherDashboard.students')}</h2>
               
               {/* Фильтры */}
               <div className="mb-4 space-y-2">
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-1">
-                    Класс
+                    {t('teacherDashboard.classLabel')}
                   </label>
                   <select
                     value={filters.level}
                     onChange={(e) => setFilters({ ...filters, level: e.target.value })}
                     className="input-field text-sm"
                   >
-                    <option value="">Все классы</option>
+                    <option value="">{t('teacherDashboard.allClasses')}</option>
                     {Array.from({ length: 11 }, (_, i) => i + 1).map((num) => (
                       <option key={num} value={num}>
                         {num}
@@ -396,14 +398,14 @@ const TeacherDashboard: React.FC = () => {
                 </div>
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-1">
-                    Буква класса
+                    {t('teacherDashboard.classLetterLabel')}
                   </label>
                   <select
                     value={filters.level_letter}
                     onChange={(e) => setFilters({ ...filters, level_letter: e.target.value })}
                     className="input-field text-sm"
                   >
-                    <option value="">Все буквы</option>
+                    <option value="">{t('teacherDashboard.allLetters')}</option>
                     {['А', 'Б', 'В', 'Г', 'Д', 'Е', 'Ж', 'З'].map((letter) => (
                       <option key={letter} value={letter}>
                         {letter}
@@ -416,7 +418,7 @@ const TeacherDashboard: React.FC = () => {
               {/* Список */}
               <div className="space-y-2 max-h-[600px] overflow-y-auto">
                 {students.length === 0 ? (
-                  <p className="text-gray-500 text-center py-4">Нет студентов</p>
+                  <p className="text-gray-500 text-center py-4">{t('teacherDashboard.noStudents')}</p>
                 ) : (
                   students.map((student) => (
                     <button
@@ -430,7 +432,7 @@ const TeacherDashboard: React.FC = () => {
                     >
                       <div className="font-semibold">{student.full_name || student.username}</div>
                       <div className={`text-sm ${selectedStudent?.id === student.id ? 'text-blue-100' : 'text-gray-600'}`}>
-                        {student.class_display || 'Без класса'}
+                        {student.class_display || t('teacherDashboard.noClass')}
                       </div>
                       <div className={`text-xs ${selectedStudent?.id === student.id ? 'text-blue-200' : 'text-gray-500'}`}>
                         @{student.username}
@@ -447,7 +449,7 @@ const TeacherDashboard: React.FC = () => {
             {selectedStudent ? (
               <div className="card">
                 <h2 className="text-2xl font-bold mb-4">
-                  Статистика: {selectedStudent.full_name || selectedStudent.username}
+                  {t('teacherDashboard.studentStats', { name: selectedStudent.full_name || selectedStudent.username })}
                 </h2>
                 <p className="text-gray-600 mb-6">{selectedStudent.class_display}</p>
 
@@ -461,27 +463,27 @@ const TeacherDashboard: React.FC = () => {
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
                       <div className="bg-gradient-to-r from-blue-500 to-purple-600 text-white p-4 rounded-xl">
                         <div className="text-2xl font-bold">{studentStats.total_points}</div>
-                        <div className="text-blue-100 text-sm">Всего баллов</div>
+                        <div className="text-blue-100 text-sm">{t('stats.totalPoints')}</div>
                       </div>
                       <div className="bg-gradient-to-r from-green-500 to-teal-600 text-white p-4 rounded-xl">
                         <div className="text-2xl font-bold">{studentStats.completed_lessons}</div>
-                        <div className="text-green-100 text-sm">Пройдено уроков</div>
+                        <div className="text-green-100 text-sm">{t('stats.completedLessons')}</div>
                       </div>
                       <div className="bg-gradient-to-r from-yellow-500 to-orange-600 text-white p-4 rounded-xl">
                         <div className="text-2xl font-bold">{((studentStats.average_percentage) || 0).toFixed(1)}%</div>
-                        <div className="text-yellow-100 text-sm">Средний %</div>
+                        <div className="text-yellow-100 text-sm">{t('stats.averagePercentage')}</div>
                       </div>
                       <div className="bg-gradient-to-r from-purple-500 to-pink-600 text-white p-4 rounded-xl">
                         <div className="text-2xl font-bold">{studentStats.total_attempts}</div>
-                        <div className="text-purple-100 text-sm">Попыток</div>
+                        <div className="text-purple-100 text-sm">{t('stats.totalAttempts')}</div>
                       </div>
                     </div>
 
                     {/* Детали по урокам */}
-                    <h3 className="text-xl font-bold mb-4">Детали по урокам</h3>
+                    <h3 className="text-xl font-bold mb-4">{t('stats.lessonsDetails')}</h3>
                     <div className="space-y-3 max-h-[500px] overflow-y-auto">
                       {studentStats.lessons_detail.length === 0 ? (
-                        <p className="text-gray-500 text-center py-4">Нет данных по урокам</p>
+                        <p className="text-gray-500 text-center py-4">{t('teacherDashboard.noLessonsData')}</p>
                       ) : (
                         studentStats.lessons_detail.map((lesson) => (
                           <div
@@ -491,7 +493,7 @@ const TeacherDashboard: React.FC = () => {
                             <div className="flex justify-between items-start mb-2">
                               <div>
                                 <h4 className="font-semibold text-lg">{lesson.lesson_title}</h4>
-                                <p className="text-gray-600 text-sm">Урок #{lesson.lesson_order}</p>
+                                <p className="text-gray-600 text-sm">{t('stats.lessonNumber', { num: lesson.lesson_order })}</p>
                               </div>
                               {lesson.is_completed ? (
                                 <CheckCircle2 className="w-6 h-6 text-green-500" />
@@ -501,7 +503,7 @@ const TeacherDashboard: React.FC = () => {
                             </div>
                             <div className="mt-3">
                               <div className="flex justify-between text-sm text-gray-600 mb-1">
-                                <span>Лучший результат</span>
+                                <span>{t('stats.bestResult')}</span>
                                 <span className="font-bold">{((lesson.best_percentage) || 0).toFixed(1)}%</span>
                               </div>
                               <div className="bg-gray-200 rounded-full h-2 mb-2">
@@ -515,9 +517,9 @@ const TeacherDashboard: React.FC = () => {
                                 />
                               </div>
                               <div className="flex justify-between text-xs text-gray-500">
-                                <span>Попыток: {lesson.attempts}</span>
+                                <span>{t('stats.attemptsLabel')} {lesson.attempts}</span>
                                 {lesson.completed_at && (
-                                  <span>Пройден: {formatDateShort(lesson.completed_at)}</span>
+                                  <span>{t('stats.lessonCompletedLabel')} {formatDateShort(lesson.completed_at)}</span>
                                 )}
                               </div>
                             </div>
@@ -528,7 +530,7 @@ const TeacherDashboard: React.FC = () => {
                   </>
                 ) : (
                   <div className="text-center py-8 text-gray-500">
-                    Выберите студента для просмотра статистики
+                    {t('teacherDashboard.chooseStudentMessage')}
                   </div>
                 )}
               </div>
@@ -536,8 +538,8 @@ const TeacherDashboard: React.FC = () => {
               <div className="card">
                 <div className="text-center py-12 text-gray-500">
                   <div className="text-6xl mb-4">👆</div>
-                  <p className="text-xl">Выберите студента из списка</p>
-                  <p className="text-sm mt-2">для просмотра его статистики</p>
+                  <p className="text-xl">{t('teacherDashboard.selectStudentTitle')}</p>
+                  <p className="text-sm mt-2">{t('teacherDashboard.selectStudentSubtitle')}</p>
                 </div>
               </div>
             )}
@@ -550,7 +552,7 @@ const TeacherDashboard: React.FC = () => {
             <div className="bg-white dark:bg-gray-800 rounded-xl p-6 max-w-md w-full shadow-xl">
               <div className="flex justify-between items-center mb-4">
                 <h3 className="text-xl font-bold text-gray-800 dark:text-gray-200">
-                  Сброс пароля студента
+                  {t('teacherDashboard.resetPasswordModalTitle')}
                 </h3>
                 <button
                   onClick={() => {
@@ -567,18 +569,18 @@ const TeacherDashboard: React.FC = () => {
               {!resetResult ? (
                 <>
                   <p className="text-gray-600 dark:text-gray-400 mb-4">
-                    Введите username студента для сброса пароля
+                    {t('teacherDashboard.enterUsernameForReset')}
                   </p>
                   <div className="mb-4">
                     <label className="block text-sm font-semibold mb-2">
-                      Username
+                      {t('teacherDashboard.usernameLabel')}
                     </label>
                     <input
                       type="text"
                       value={resetUsername}
                       onChange={(e) => setResetUsername(e.target.value)}
                       className="input-field w-full"
-                      placeholder="Введите username"
+                      placeholder={t('teacherDashboard.enterUsernamePlaceholder')}
                       onKeyPress={(e) => {
                         if (e.key === 'Enter' && resetUsername.trim()) {
                           handleResetPassword();
@@ -595,10 +597,10 @@ const TeacherDashboard: React.FC = () => {
                       {resetLoading ? (
                         <>
                           <Loader2 className="w-4 h-4 animate-spin mr-2" />
-                          Сброс...
+                          {t('teacherDashboard.resetting')}
                         </>
                       ) : (
-                        'Сбросить пароль'
+                        t('teacherDashboard.resetPassword')
                       )}
                     </button>
                     <button
@@ -609,7 +611,7 @@ const TeacherDashboard: React.FC = () => {
                       }}
                       className="btn-secondary"
                     >
-                      Отмена
+                      {t('profile.cancel')}
                     </button>
                   </div>
                 </>
@@ -617,13 +619,13 @@ const TeacherDashboard: React.FC = () => {
                 <>
                   <div className="bg-green-50 dark:bg-green-900/20 border-2 border-green-200 dark:border-green-800 rounded-xl p-4 mb-4">
                     <p className="text-green-800 dark:text-green-200 font-semibold mb-2">
-                      Пароль успешно сброшен!
+                      {t('teacherDashboard.passwordResetSuccess')}
                     </p>
                     <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
-                      Username: <span className="font-mono font-bold">{resetResult.username}</span>
+                      {t('teacherDashboard.username')}: <span className="font-mono font-bold">{resetResult.username}</span>
                     </p>
                     <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
-                      Новый пароль:
+                      {t('teacherDashboard.newPasswordLabel')}:
                     </p>
                     <div className="bg-white dark:bg-gray-700 p-3 rounded border-2 border-green-300 dark:border-green-600">
                       <p className="font-mono text-lg font-bold text-center text-green-700 dark:text-green-300">
@@ -631,7 +633,7 @@ const TeacherDashboard: React.FC = () => {
                       </p>
                     </div>
                     <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
-                      Сохраните этот пароль! Он больше не будет показан.
+                      {t('teacherDashboard.savePasswordWarning')}
                     </p>
                   </div>
                   <button
@@ -642,7 +644,7 @@ const TeacherDashboard: React.FC = () => {
                     }}
                     className="btn-primary w-full"
                   >
-                    Закрыть
+                    {t('teacherDashboard.close')}
                   </button>
                 </>
               )}

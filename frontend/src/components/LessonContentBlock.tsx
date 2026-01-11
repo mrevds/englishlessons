@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import type { ContentBlock } from '../data/lessonsContent';
 
 interface LessonContentBlockProps {
@@ -6,6 +7,8 @@ interface LessonContentBlockProps {
 }
 
 export const LessonContentBlock: React.FC<LessonContentBlockProps> = ({ block }) => {
+  const { t } = useTranslation();
+
   switch (block.type) {
     case 'text':
       return (
@@ -123,13 +126,13 @@ export const LessonContentBlock: React.FC<LessonContentBlockProps> = ({ block })
             <thead className="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/30 dark:to-purple-900/30">
               <tr>
                 <th className="px-4 py-2 text-left text-sm font-semibold text-gray-900 dark:text-white border-b border-gray-300 dark:border-gray-600">
-                  Слово
+                  {t('lessonContent.word')}
                 </th>
                 <th className="px-4 py-2 text-left text-sm font-semibold text-gray-900 dark:text-white border-b border-gray-300 dark:border-gray-600">
-                  ❌ Uncountable
+                  ❌ {t('lessonContent.uncountable')}
                 </th>
                 <th className="px-4 py-2 text-left text-sm font-semibold text-gray-900 dark:text-white border-b border-gray-300 dark:border-gray-600">
-                  ✅ Countable
+                  ✅ {t('lessonContent.countable')}
                 </th>
               </tr>
             </thead>

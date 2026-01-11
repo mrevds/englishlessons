@@ -1,8 +1,10 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import Leaderboard from '../components/Leaderboard';
 
 const LeaderboardPage: React.FC = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
 
   return (
@@ -12,7 +14,7 @@ const LeaderboardPage: React.FC = () => {
           onClick={() => navigate('/lessons')}
           className="mb-4 sm:mb-6 text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-2 text-sm sm:text-base"
         >
-          ← Назад к урокам
+          {t('leaderboard.backToLessons')}
         </button>
         <Leaderboard />
       </div>

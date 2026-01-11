@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate, Link } from 'react-router-dom';
 import ThemeToggle from './ThemeToggle';
@@ -10,6 +11,7 @@ const Login: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const { login } = useAuth();
+  const { t } = useTranslation();
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -18,7 +20,7 @@ const Login: React.FC = () => {
 
     // Базовая валидация
     if (!username.trim() || !password) {
-      setError('Заполните все поля');
+      setError(t('login.fillAllFields'));
       return;
     }
 
@@ -28,7 +30,7 @@ const Login: React.FC = () => {
       await login(username.trim(), password);
       navigate('/lessons');
     } catch (err: any) {
-      setError(err.response?.data?.error || 'Ошибка входа');
+      setError(err.response?.data?.error || t('login.error'));
     } finally {
       setLoading(false);
     }
@@ -42,9 +44,9 @@ const Login: React.FC = () => {
       <div className="card max-w-md w-full mx-3 sm:mx-0">
         <div className="text-center mb-6 sm:mb-8">
           <h1 className="text-2xl sm:text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-2">
-            English Lessons
+            {t('nav.siteTitle')}
           </h1>
-          <p className="text-gray-600 dark:text-gray-400 text-sm sm:text-base">Войдите в свой аккаунт</p>
+          <p className="text-gray-600 dark:text-gray-400 text-sm sm:text-base">{t('login.title')}</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
@@ -56,7 +58,7 @@ const Login: React.FC = () => {
 
           <div>
             <label className="block text-gray-700 dark:text-gray-300 font-semibold mb-1.5 sm:mb-2 text-sm sm:text-base">
-              Имя пользователя
+              {t('login.username')}
             </label>
             <input
               type="text"
@@ -69,7 +71,7 @@ const Login: React.FC = () => {
 
           <div>
             <label className="block text-gray-700 dark:text-gray-300 font-semibold mb-1.5 sm:mb-2 text-sm sm:text-base">
-              Пароль
+              {t('login.password')}
             </label>
             <div className="relative">
               <input
@@ -83,7 +85,7 @@ const Login: React.FC = () => {
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors"
-                aria-label={showPassword ? "Скрыть пароль" : "Показать пароль"}
+                aria-label={showPassword ? t('login.hidePassword') : t('login.showPassword')}
               >
                 {showPassword ? (
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -104,15 +106,15 @@ const Login: React.FC = () => {
             disabled={loading}
             className="btn-primary w-full disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base"
           >
-            {loading ? 'Вход...' : 'Войти'}
+            {loading ? t('login.loading') : t('login.login')}
           </button>
         </form>
 
         <div className="mt-4 sm:mt-6 text-center">
           <p className="text-gray-600 dark:text-gray-400 text-sm sm:text-base">
-            Нет аккаунта?{' '}
+            {t('login.noAccount')} {' '}
             <Link to="/register" className="text-blue-600 dark:text-blue-400 font-semibold hover:underline">
-              Зарегистрироваться
+              {t('login.register')}
             </Link>
           </p>
         </div>

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { achievementsAPI } from '../api/achievements';
 import type { Achievement } from '../api/achievements';
 import { formatDateShort } from '../utils/date';
@@ -7,6 +8,7 @@ import { Trophy, Target, Loader2, Award } from 'lucide-react';
 const Achievements: React.FC = () => {
   const [achievements, setAchievements] = useState<Achievement[]>([]);
   const [loading, setLoading] = useState(true);
+  const { t } = useTranslation();
 
   useEffect(() => {
     loadAchievements();
@@ -35,14 +37,14 @@ const Achievements: React.FC = () => {
     <div className="card">
       <h2 className="text-xl sm:text-2xl font-bold mb-3 sm:mb-4 flex items-center gap-2">
         <Trophy className="w-5 h-5 sm:w-6 sm:h-6 text-yellow-500" />
-        Достижения
+        {t('achievements.title')}
       </h2>
       
       {achievements.length === 0 ? (
         <div className="text-center py-6 sm:py-8 text-gray-500 dark:text-gray-400">
           <Target className="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-3 sm:mb-4 text-gray-400" />
-          <p className="text-sm sm:text-base">Пока нет достижений</p>
-          <p className="text-xs sm:text-sm mt-1 sm:mt-2">Проходите уроки и получайте бейджи!</p>
+          <p className="text-sm sm:text-base">{t('achievements.emptyTitle')}</p>
+          <p className="text-xs sm:text-sm mt-1 sm:mt-2">{t('achievements.emptyDesc')}</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-3">
@@ -57,7 +59,7 @@ const Achievements: React.FC = () => {
               <div className="font-bold text-sm sm:text-lg text-gray-800 dark:text-gray-200">{achievement.title}</div>
               <div className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mt-0.5 sm:mt-1">{achievement.description}</div>
               <div className="text-[10px] sm:text-xs text-gray-500 dark:text-gray-500 mt-1.5 sm:mt-2">
-                Получено: {formatDateShort(achievement.earned_at)}
+                {t('achievements.earned')} {formatDateShort(achievement.earned_at)}
               </div>
             </div>
           ))}

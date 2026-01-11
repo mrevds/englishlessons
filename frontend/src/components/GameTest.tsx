@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { lessonsAPI } from '../api/lessons';
 import type { Question, AnswerOption } from '../api/lessons';
 import { PartyPopper, Frown, Star, Clock } from 'lucide-react';
@@ -17,6 +18,7 @@ const GameTest: React.FC<GameTestProps> = ({ lessonId, questions, onComplete: _o
   const [showResult, setShowResult] = useState(false);
   const [result, setResult] = useState<any>(null);
   const [animations] = useState<Record<number, 'correct' | 'wrong' | null>>({});
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (timeLeft > 0 && !showResult) {
@@ -60,7 +62,7 @@ const GameTest: React.FC<GameTestProps> = ({ lessonId, questions, onComplete: _o
       setResult(result);
       setShowResult(true);
     } catch (error: any) {
-      alert(error.response?.data?.error || 'Ошибка отправки теста');
+      alert(error.response?.data?.error || t('gameTest.submitError'));
     }
   };
 
@@ -86,10 +88,10 @@ const GameTest: React.FC<GameTestProps> = ({ lessonId, questions, onComplete: _o
               )}
             </div>
             <h2 className="text-xl sm:text-3xl font-bold mb-2">
-              {isPassed ? 'Поздравляем!' : 'Попробуйте еще раз'}
+              {isPassed ? t('gameTest.congrats') : t('gameTest.tryAgain')}
             </h2>
             <p className="text-base sm:text-xl text-gray-600 dark:text-gray-400 mb-3 sm:mb-4">
-              Ваш результат: {percentage.toFixed(1)}%
+              {t('gameTest.yourResult')} {percentage.toFixed(1)}%
             </p>
             <div className="flex justify-center gap-1 sm:gap-2 mb-3 sm:mb-4">
               {Array.from({ length: 5 }).map((_, i) => (
@@ -106,17 +108,17 @@ const GameTest: React.FC<GameTestProps> = ({ lessonId, questions, onComplete: _o
               />
             </div>
             <p className="text-gray-600 dark:text-gray-400 text-sm sm:text-base">
-              Правильных ответов: {result.correct_answers} из {result.total_questions}
+              {t('gameTest.correctAnswers', { correct: result.correct_answers, total: result.total_questions })}
             </p>
             {!isPassed && (
               <p className="text-red-600 mt-3 sm:mt-4 font-semibold text-sm sm:text-base">
-                Для прохождения нужно набрать минимум 70%
+                {t('gameTest.passingRequirement', { min: 70 })}
               </p>
             )}
           </div>
           <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 justify-center">
             <button onClick={onClose} className="btn-primary">
-              Закрыть
+              {t('gameTest.close')}
             </button>
             {!isPassed && (
               <button
@@ -128,7 +130,7 @@ const GameTest: React.FC<GameTestProps> = ({ lessonId, questions, onComplete: _o
                 }}
                 className="btn-secondary"
               >
-                Попробовать снова
+                {t('gameTest.tryAgainBtn')}
               </button>
             )}
           </div>
@@ -144,7 +146,7 @@ const GameTest: React.FC<GameTestProps> = ({ lessonId, questions, onComplete: _o
         <div className="mb-4 sm:mb-6">
           <div className="flex justify-between items-center mb-3 sm:mb-4">
             <h2 className="text-lg sm:text-2xl font-bold">
-              Вопрос {currentQuestionIndex + 1} из {questions.length}
+              {t('gameTest.questionOf', { current: currentQuestionIndex + 1, total: questions.length })}
             </h2>
             <div className="text-lg sm:text-2xl font-bold text-blue-600 flex items-center gap-1 sm:gap-2">
               <Clock className="w-5 h-5 sm:w-6 sm:h-6" />
@@ -206,14 +208,14 @@ const GameTest: React.FC<GameTestProps> = ({ lessonId, questions, onComplete: _o
             className="btn-secondary text-sm sm:text-base py-2 px-3 sm:py-3 sm:px-6"
             disabled={showResult}
           >
-            Отмена
+            {t('gameTest.cancel')}
           </button>
           <button
             onClick={handleNext}
             disabled={!selectedAnswers[currentQuestion.id]}
             className="btn-primary disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base py-2 px-3 sm:py-3 sm:px-6"
           >
-            {currentQuestionIndex === questions.length - 1 ? 'Завершить' : 'Далее'}
+            {currentQuestionIndex === questions.length - 1 ? t('gameTest.finish') : t('gameTest.next')}
           </button>
         </div>
       </div>

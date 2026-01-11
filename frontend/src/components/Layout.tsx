@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { useTranslation } from 'react-i18next';
 import ThemeToggle from './ThemeToggle';
 import { BarChart3, User, Trophy, Menu, X } from 'lucide-react';
 
@@ -12,6 +13,11 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { t, i18n } = useTranslation();
+
+  const changeLanguage = (lng: string) => {
+    i18n.changeLanguage(lng);
+  };
 
   return (
     <div className="min-h-screen">
@@ -24,7 +30,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                 onClick={() => navigate('/lessons')}
                 className="text-lg sm:text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent"
               >
-                English Lessons
+                {t('nav.siteTitle')}
               </button>
               {user?.role === 'teacher' && (
                 <button
@@ -32,7 +38,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                   className="hidden sm:flex text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 items-center gap-2 text-sm"
                 >
                   <BarChart3 className="w-4 h-4" />
-                  Дашборд
+                  {t('nav.dashboard')}
                 </button>
               )}
             </div>
@@ -44,7 +50,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                 className="bg-gradient-to-r from-yellow-500 to-orange-500 text-white px-3 lg:px-4 py-2 rounded-lg hover:from-yellow-600 hover:to-orange-600 flex items-center gap-1 lg:gap-2 font-semibold shadow-lg text-sm"
               >
                 <Trophy className="w-4 h-4 lg:w-5 lg:h-5" />
-                <span className="hidden lg:inline">Рейтинг</span>
+                <span className="hidden lg:inline">{t('nav.leaderboard')}</span>
               </button>
               {/* <button
                 onClick={() => navigate('/games')}
@@ -59,12 +65,25 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                   className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 flex items-center gap-2 text-sm"
                 >
                   <User className="w-4 h-4" />
-                  <span className="hidden lg:inline">Профиль</span>
+                  <span className="hidden lg:inline">{t('nav.profile')}</span>
                 </button>
               )}
               <ThemeToggle />
+
+              <div className="ml-2">
+                <select
+                  aria-label={t('nav.languageSelector')}
+                  defaultValue={i18n.language || 'ru'}
+                  onChange={(e) => changeLanguage(e.target.value)}
+                  className="bg-transparent border border-gray-200 dark:border-gray-700 rounded px-2 py-1 text-sm"
+                >
+                  <option value="ru">{t('nav.lang_ru')}</option>
+                  <option value="uz-latn">{t('nav.lang_uz')}</option>
+                </select>
+              </div>
+
               <button onClick={logout} className="btn-secondary text-xs sm:text-sm py-2 px-3">
-                Выйти
+                {t('nav.logout')}
               </button>
             </div>
 
@@ -95,7 +114,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                 className="w-full bg-gradient-to-r from-yellow-500 to-orange-500 text-white px-4 py-3 rounded-lg flex items-center justify-center gap-2 font-semibold"
               >
                 <Trophy className="w-5 h-5" />
-                Рейтинг игр
+                {t('nav.gamesLeaderboard')}
               </button>
               {user?.role === 'teacher' && (
                 <button
@@ -103,7 +122,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                   className="w-full btn-primary flex items-center justify-center gap-2"
                 >
                   <BarChart3 className="w-5 h-5" />
-                  Дашборд
+                  {t('nav.dashboard')}
                 </button>
               )}
               {user?.role === 'student' && (
@@ -112,15 +131,27 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                   className="w-full btn-secondary flex items-center justify-center gap-2"
                 >
                   <User className="w-5 h-5" />
-                  Профиль
+                  {t('nav.profile')}
                 </button>
               )}
-              <button
-                onClick={() => { logout(); setMobileMenuOpen(false); }}
-                className="w-full btn-secondary"
-              >
-                Выйти
-              </button>
+              <div className="px-4">
+                <select
+                  aria-label={t('nav.languageSelector')}
+                  defaultValue={i18n.language || 'ru'}
+                  onChange={(e) => { changeLanguage(e.target.value); setMobileMenuOpen(false); }}
+                  className="w-full bg-transparent border border-gray-200 dark:border-gray-700 rounded px-2 py-2 text-sm mb-3"
+                >
+                  <option value="ru">{t('nav.lang_ru')}</option>
+                  <option value="uz-latn">{t('nav.lang_uz')}</option>
+                </select>
+
+                <button
+                  onClick={() => { logout(); setMobileMenuOpen(false); }}
+                  className="w-full btn-secondary"
+                >
+                  {t('nav.logout')}
+                </button>
+              </div>
             </div>
           )}
         </div>
