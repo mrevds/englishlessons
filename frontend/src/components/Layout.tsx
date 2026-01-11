@@ -14,9 +14,20 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   const navigate = useNavigate();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { t, i18n } = useTranslation();
+  const [lang, setLang] = useState<string>(i18n.language || 'ru');
 
-  const changeLanguage = (lng: string) => {
-    i18n.changeLanguage(lng);
+  const changeLanguage = async (lng: string) => {
+    try {
+      await i18n.changeLanguage(lng);
+      setLang(lng);
+    } catch (e) {
+      console.error('Error changing language:', e);
+    }
+  };
+
+  const toggleLanguage = () => {
+    const newLng = (lang || '').startsWith('uz') ? 'ru' : 'uz-latn';
+    changeLanguage(newLng);
   };
 
   return (
@@ -74,17 +85,17 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                 <div className="inline-flex rounded-md overflow-hidden border border-gray-200 dark:border-gray-700">
                   <button
                     type="button"
-                    onClick={() => changeLanguage('ru')}
-                    aria-pressed={i18n.language === 'ru'}
-                    className={`px-3 py-1 text-sm ${i18n.language === 'ru' ? 'bg-gray-100 dark:bg-gray-700 font-semibold' : 'bg-transparent'}`}
+                    onClick={toggleLanguage}
+                    aria-pressed={lang === 'ru'}
+                    className={`px-3 py-1 text-sm ${lang === 'ru' ? 'bg-gray-100 dark:bg-gray-700 font-semibold' : 'bg-transparent'}`}
                   >
                     RU
                   </button>
                   <button
                     type="button"
-                    onClick={() => changeLanguage('uz-latn')}
-                    aria-pressed={i18n.language === 'uz-latn' || (i18n.language || '').startsWith('uz')}
-                    className={`px-3 py-1 text-sm ${i18n.language === 'uz-latn' || (i18n.language || '').startsWith('uz') ? 'bg-gray-100 dark:bg-gray-700 font-semibold' : 'bg-transparent'}`}
+                    onClick={toggleLanguage}
+                    aria-pressed={lang === 'uz-latn' || (lang || '').startsWith('uz')}
+                    className={`px-3 py-1 text-sm ${lang === 'uz-latn' || (lang || '').startsWith('uz') ? 'bg-gray-100 dark:bg-gray-700 font-semibold' : 'bg-transparent'}`}
                   >
                     UZ
                   </button>
@@ -147,17 +158,17 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                 <div className="w-full inline-flex rounded-md overflow-hidden border border-gray-200 dark:border-gray-700 mb-3">
                   <button
                     type="button"
-                    onClick={() => { changeLanguage('ru'); setMobileMenuOpen(false); }}
-                    aria-pressed={i18n.language === 'ru'}
-                    className={`flex-1 px-3 py-2 text-sm ${i18n.language === 'ru' ? 'bg-gray-100 dark:bg-gray-700 font-semibold' : 'bg-transparent'}`}
+                    onClick={() => { toggleLanguage(); setMobileMenuOpen(false); }}
+                    aria-pressed={lang === 'ru'}
+                    className={`flex-1 px-3 py-2 text-sm ${lang === 'ru' ? 'bg-gray-100 dark:bg-gray-700 font-semibold' : 'bg-transparent'}`}
                   >
                     RU
                   </button>
                   <button
                     type="button"
-                    onClick={() => { changeLanguage('uz-latn'); setMobileMenuOpen(false); }}
-                    aria-pressed={i18n.language === 'uz-latn' || (i18n.language || '').startsWith('uz')}
-                    className={`flex-1 px-3 py-2 text-sm ${i18n.language === 'uz-latn' || (i18n.language || '').startsWith('uz') ? 'bg-gray-100 dark:bg-gray-700 font-semibold' : 'bg-transparent'}`}
+                    onClick={() => { toggleLanguage(); setMobileMenuOpen(false); }}
+                    aria-pressed={lang === 'uz-latn' || (lang || '').startsWith('uz')}
+                    className={`flex-1 px-3 py-2 text-sm ${lang === 'uz-latn' || (lang || '').startsWith('uz') ? 'bg-gray-100 dark:bg-gray-700 font-semibold' : 'bg-transparent'}`}
                   >
                     UZ
                   </button>
