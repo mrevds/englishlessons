@@ -107,7 +107,7 @@ const resources = {
       },
       lessons: {
         welcome: 'Добро пожаловать, {{name}}!',
-        games: '🎮 ИГРЫ',
+        games: 'ИГРЫ',
         stats: 'Статистика',
         progress: 'Прогресс',
         attempts: 'Попыток:',
@@ -508,7 +508,7 @@ const resources = {
       },
       lessons: {
         welcome: 'Xush kelibsiz, {{name}}!',
-        games: '🎮 OʻYINLAR',
+        games: 'OʻYINLAR',
         stats: 'Statistika',
         progress: 'Faoliyat',
         attempts: 'Urinishlar:',

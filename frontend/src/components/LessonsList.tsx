@@ -5,7 +5,8 @@ import { lessonsAPI } from '../api/lessons';
 import type { Lesson } from '../api/lessons';
 import { useAuth } from '../context/AuthContext';
 import ThemeToggle from './ThemeToggle';
-import { BookOpen, BarChart3, Trophy, Lock, Rocket, RotateCcw, CheckCircle2, Sparkles, Loader2, HandHeart, User, Gamepad2 } from 'lucide-react';
+import { BookOpen, BarChart3, Trophy, Lock, Rocket, RotateCcw, CheckCircle2, Sparkles, Loader2, HandHeart, User, Gamepad2, ChevronDown } from 'lucide-react';
+import i18n from '../i18n';
 
 const LessonsList: React.FC = () => {
   const [lessons, setLessons] = useState<Lesson[]>([]);
@@ -13,6 +14,8 @@ const LessonsList: React.FC = () => {
   const { user, logout } = useAuth();
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [currentLang, setCurrentLang] = useState(i18n.language);
 
   // Кеш для уроков
   const [cache, setCache] = useState<{ data: Lesson[]; timestamp: number } | null>(null);
@@ -21,6 +24,22 @@ const LessonsList: React.FC = () => {
   useEffect(() => {
     loadLessons();
   }, []);
+
+  useEffect(() => {
+    const handleLanguageChange = () => setCurrentLang(i18n.language);
+    i18n.on('languageChanged', handleLanguageChange);
+    return () => i18n.off('languageChanged', handleLanguageChange);
+  }, []);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (isDropdownOpen && !(event.target as Element).closest('.language-dropdown')) {
+        setIsDropdownOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [isDropdownOpen]);
 
   const loadLessons = async () => {
     const now = Date.now();
@@ -111,6 +130,31 @@ const LessonsList: React.FC = () => {
                 </button>
               </>
             )} 
+            <div className="relative language-dropdown">
+              <button
+                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                className="btn-primary text-sm sm:text-base flex items-center gap-2"
+              >
+                {currentLang === 'ru' ? '🇷🇺 RU' : '🇺🇿 UZ'}
+                <ChevronDown className="w-4 h-4" />
+              </button>
+              {isDropdownOpen && (
+                <div className="absolute top-full mt-2 right-0 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-50 min-w-[120px]">
+                  <button
+                    onClick={() => { i18n.changeLanguage('ru'); setIsDropdownOpen(false); }}
+                    className="w-full px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-2"
+                  >
+                    🇷🇺 RU
+                  </button>
+                  <button
+                    onClick={() => { i18n.changeLanguage('uz-latn'); setIsDropdownOpen(false); }}
+                    className="w-full px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-2"
+                  >
+                    🇺🇿 UZ
+                  </button>
+                </div>
+              )}
+            </div>
             <ThemeToggle />
             <button onClick={logout} className="btn-secondary text-sm sm:text-base">
               {t('nav.logout')}
